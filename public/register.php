@@ -4,7 +4,7 @@ require_once '../auth/Applicants_account.php';
 
 $applicants_account = new Applicants_account();
 $messageErr = '';
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = trim($_POST['password']);
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <button type="submit" name="login" class="btn btn-primary w-100">Login</button>
             </form>
-            <p class="mt-3 text-center">Already have an account? <a href="register.php">Register here</a>.</p>
+            <p class="mt-3 text-center">Already have an account? <a href="login.php">Register here</a>.</p>
         </div>
     </div>
 </div>

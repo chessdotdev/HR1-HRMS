@@ -12,7 +12,7 @@ if (isset($_SESSION['username'])) {
 $applicant_acc = new Applicants_account();
 $messageErr = '';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS));
     $password = trim($_POST['password']);
 
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
         <p class="mt-3 text-center">
-                Don't have an account? <a href="login.php">Login</a>
+                Don't have an account? <a href="register.php">Login</a>
             </p>
     </div>
 </div>
