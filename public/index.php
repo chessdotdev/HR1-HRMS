@@ -28,12 +28,10 @@ $stmt = $recruitment->getAllJobs();
 ?>
 <?php include '../includes/header.php'; ?>
 
-<div class="container-fluid px-0">
+<div class="container px-0">
     <!-- Banner Section -->
     <div class="position-relative">
-        <div class="hero-banner bg-dark text-white d-flex align-items-center justify-content-center text-center"
-             style="background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('./assets/image/job-opening.jpg') center/cover no-repeat; 
-                    min-height: 450px; background-attachment: fixed;">
+        <div class="hero-banner bg-dark text-white d-flex align-items-center justify-content-center text-center">
             <div class="container">
                 <h1 class="display-3 fw-bold mb-3">Join Our Team</h1>
                 <p class="lead fs-4 mb-4 opacity-90">Exciting career opportunities in hospitality<br>Hotel & Restaurant – Where Passion Meets Profession</p>
@@ -99,10 +97,7 @@ $stmt = $recruitment->getAllJobs();
                 <p class="lead text-muted">Please check back later or follow us for updates.</p>
             </div>
         <?php endif; ?>
-
-        <div class="text-center mt-5 pt-4">
-            <p class="text-muted">Not seeing the right role? <a href="mailto:careers@yourhotel.com" class="text-primary">Send us your resume</a></p>
-        </div>
+        
     </div>
 </div>
 

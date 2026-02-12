@@ -4,10 +4,10 @@
 require_once '../auth/Admin.php';
 
 
-if (isset($_SESSION['username'])) {
-    header("Location: index.php");
-    exit();
-}
+// if (isset($_SESSION['username'])) {
+//     header("Location: index.php");
+//     exit();
+// }
 
 $applicant_acc = new Admin();
 $messageErr = '';
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($user) {
                 $_SESSION['id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
-                header("Location: dashboard.php");
+                header("Location: job.php");
                 exit();
             } else {
                 $messageErr = "Invalid username or password.";

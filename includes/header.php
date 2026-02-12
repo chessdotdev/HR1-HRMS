@@ -14,10 +14,21 @@ session_start();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <style>
+   html{
+        scroll-behavior: smooth;
+    }
     .hero-banner {
-    position: relative;
-}
+        position: relative;
+        background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+        url('./assets/image/job-opening.jpg') center center/cover no-repeat; 
+        min-height: 450px;
+        background-attachment: scroll;
+        background-size: 100%;
 
+}
+#jobs{
+    scroll-margin-top: 80px; 
+}
 .job-card {
     border-radius: 16px;
     overflow: hidden;

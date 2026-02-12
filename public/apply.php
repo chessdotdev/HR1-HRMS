@@ -40,23 +40,6 @@ include '../includes/verify_auth.php';
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" required>
-            </div>
-
-            <!-- Job Details -->
-            <div class="mb-3">
-                <label class="form-label">Position Applying For</label>
-                <select name="position" class="form-control" required>
-                    <option value="">Select Position</option>
-                    <option value="HR Assistant">HR Assistant</option>
-                    <option value="Recruiter">Recruiter</option>
-                    <option value="HR Manager">HR Manager</option>
-                    <option value="Onboarding Specialist">Onboarding Specialist</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
                 <label class="form-label">Upload Resume (PDF)</label>
                 <input type="file" name="resume" class="form-control" accept=".pdf" required>
             </div>
