@@ -3,7 +3,7 @@ require_once '../modules/Recruitment.php';
 
 $recruitment = new Recruitment();
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if($_SERVER["REQUEST_METHOD"] === "POST"){
     $title = $_POST['title'];
     $department = $_POST['department'];
     $description = $_POST['description'];

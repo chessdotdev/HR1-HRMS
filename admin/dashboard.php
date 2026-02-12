@@ -1,0 +1,307 @@
+<?php include 'includes/header.php'; ?>
+<style>
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Sidebar */
+#sidebar {
+  width: 250px;
+  background: #111827; 
+  color: #f9fafb;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s;
+  overflow: hidden;
+}
+
+/* Collapsed Sidebar */
+#sidebar.collapsed {
+  width: 70px;
+}
+
+/* Sidebar Header */
+#sidebar .d-flex {
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #1f2937;
+}
+
+.sidebar-logo a {
+  color: #f9fafb;
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.3s;
+}
+
+#sidebar.collapsed .sidebar-logo a {
+  opacity: 0;
+}
+
+/* Toggle Button */
+.toggle-btn {
+  position: absolute;      
+  right: 0%;        
+  top: 50%;               
+  transform: translateY(-50%);
+  background: #111827;      
+  border: 1px solid #3b82f6;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: #f9fafb;
+  padding: 0.25rem 0.5rem;
+  z-index: 10;            
+}
+
+
+/* Sidebar Navigation */
+.sidebar-nav {
+  flex-grow: 1;
+  padding: 1rem 0;
+}
+
+.sidebar-item {
+  list-style: none;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #d1d5db;
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  transition: background 0.2s, color 0.2s;
+  overflow: hidden;
+}
+
+.sidebar-link i {
+  min-width: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Hover & Active */
+.sidebar-link:hover,
+.sidebar-link.active {
+  background: #1f2937;
+  color: #3b82f6; 
+}
+
+/* Collapsible Dropdown */
+.sidebar-dropdown {
+  display: none;
+  flex-direction: column;
+  padding-left: 1.5rem;
+}
+
+.sidebar-item.open > .sidebar-dropdown {
+  display: flex;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid #1f2937;
+}
+
+.sidebar-footer a {
+  color: #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.sidebar-footer a:hover {
+  color: #3b82f6;
+}
+
+.main {
+  flex-grow: 1;
+  background: #f9fafb;
+  padding: 1.5rem;
+  transition: margin-left 0.3s;
+}
+
+#sidebar.collapsed .sidebar-link span {
+  display: none;
+}
+
+#sidebar.collapsed .sidebar-dropdown {
+  display: none !important;
+}
+
+.sidebar-link.has-dropdown::after {
+  content: "▼";
+  margin-left: auto;
+  font-size: 0.6rem;
+  transition: transform 0.3s;
+}
+
+.sidebar-item.open > .sidebar-link.has-dropdown::after {
+  transform: rotate(-180deg);
+}
+
+</style>
+<div class="wrapper">
+    <aside id="sidebar">
+        <!-- Sidebar Header -->
+        <div class="d-flex align-items-center mb-3" style="position: relative;">
+           <div class="sidebar-logo">
+                <a href="dashboard.php">Admin</a>
+            </div>
+            <button class="toggle-btn btn btn-light me-2" type="button">
+                <i><img src="web.png" alt="" width="25px"></i>
+            </button>
+            
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <ul class="sidebar-nav list-unstyled">
+
+            <!-- Profile -->
+            <li class="sidebar-item">
+                <a href="dashboard.php" class="sidebar-link">
+                    <i><img src="web.png" alt="" width="15px"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <!-- Tasks -->
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <i><!-- svg icon --></i>
+                    <span>Task</span>
+                </a>
+            </li>
+
+            <!-- Auth Dropdown -->
+            <li class="sidebar-item">
+                <a href="#authMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
+                    <i><!-- svg icon --></i>
+                    <span>Auth</span>
+                </a>
+                <ul id="authMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
+                    <li class="sidebar-item"><a href="#" class="sidebar-link">Login</a></li>
+                    <li class="sidebar-item"><a href="#" class="sidebar-link">Register</a></li>
+                </ul>
+            </li>
+
+            <!-- Multi Level Dropdown -->
+            <li class="sidebar-item">
+                <a href="#multiMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
+                    <span>Multi Level</span>
+                    <i><!-- svg icon --></i>
+                </a>
+                <ul id="multiMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
+
+                    <!-- Two Links Nested -->
+                    <li class="sidebar-item">
+                        <a href="#multiTwoMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
+                            Two Links
+                        </a>
+                        <ul id="multiTwoMenu" class="collapse list-unstyled" data-bs-parent="#multiMenu">
+                            <li class="sidebar-item"><a href="#" class="sidebar-link">Link1</a></li>
+                            <li class="sidebar-item"><a href="#" class="sidebar-link">Link2</a></li>
+                            <li class="sidebar-item"><a href="#" class="sidebar-link">Link3</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </li>
+
+            <!-- Notifications -->
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <i><!-- svg icon --></i>
+                    <span>Notif</span>
+                </a>
+            </li>
+
+            <!-- Settings -->
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link">
+                    <i><!-- svg icon --></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+
+        </ul>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer mt-auto">
+            <a href="#" class="sidebar-link">
+                <i><!-- svg icon --></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main p-3">
+        <div class="text-center mt-3">
+            <h1>Sidebar Title</h1>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.querySelector('.toggle-btn');
+
+  // Collapse/Expand sidebar
+  toggleBtn.addEventListener('click', () => {
+    const isCollapsed = sidebar.classList.toggle('collapsed');
+
+    if (isCollapsed) {
+      // Close all open items
+      const openItems = sidebar.querySelectorAll('.sidebar-item.open');
+      openItems.forEach(item => {
+        item.classList.remove('open');
+      });
+
+      // Collapse all dropdown ULs
+      const dropdowns = sidebar.querySelectorAll('.sidebar-dropdown, .collapse');
+      dropdowns.forEach(ul => {
+        ul.classList.remove('show');
+      });
+    }
+  });
+
+  // Dropdowns
+  const dropdownLinks = sidebar.querySelectorAll('.sidebar-link.has-dropdown');
+
+  dropdownLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const parentItem = link.parentElement;
+
+      // Expand sidebar if collapsed
+      if (sidebar.classList.contains('collapsed')) {
+        sidebar.classList.remove('collapsed');
+      }
+
+      // Toggle open state
+      parentItem.classList.toggle('open');
+
+      // Toggle the actual UL dropdown
+      const dropdown = parentItem.querySelector('.sidebar-dropdown, .collapse');
+      if (dropdown) {
+        dropdown.classList.toggle('show');
+      }
+    });
+  });
+});
+</script>
+
+
+<?php include 'includes/footer.php'; ?>

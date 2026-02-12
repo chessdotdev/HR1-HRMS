@@ -11,14 +11,15 @@ class Applicants_account{
         $this->conn = $db->connect();
     }
 
-    public function createApplicant($username, $email, $password){
+    public function createApplicant($username, $email, $password, $role ="Applicant"){
         $query = "INSERT INTO ". $this->table_name. " 
-        (username, email, password) VALUES (:username, :email, :password)";
+        (username, email, password, role) VALUES (:username, :email, :password, :role)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':email', $email);
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $stmt->bindParam(':password', $hashedPassword);
+        $stmt->bindParam(':role', $role);
         $stmt->execute();
         return $stmt;
     }

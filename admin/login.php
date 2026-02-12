@@ -12,7 +12,7 @@ require_once '../auth/Admin.php';
 $applicant_acc = new Admin();
 $messageErr = '';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS));
     $password = trim($_POST['password']);
 

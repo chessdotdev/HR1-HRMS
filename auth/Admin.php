@@ -11,14 +11,15 @@ class Admin{
         $this->conn = $db->connect();
     }
     
-    public function createAdmin($username, $email, $password){
+    public function createAdmin($username, $email, $password, $role = "admin"){
         $query = "INSERT INTO ". $this->table_name. " 
-        (username, email, password) VALUES (:username, :email, :password)";
+        (username, email, password, role) VALUES (:username, :email, :password, :role)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':email', $email);
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $stmt->bindParam(':password', $hashedPassword);
+        $stmt->bindParam(':role', $role);
         $stmt->execute();
         return $stmt;
     }
