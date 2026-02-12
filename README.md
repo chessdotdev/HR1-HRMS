@@ -1,4 +1,5 @@
 ## FILE STRUCTURE
+```
 HR1_Human_Resource_System/
 │
 ├── admin/                       <-- Admin dashboard / HR side
@@ -36,7 +37,7 @@ HR1_Human_Resource_System/
 │   └── footer.php
 │
 └── .htaccess
-
+```
 ### .htaccess
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
