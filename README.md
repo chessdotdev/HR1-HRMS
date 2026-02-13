@@ -60,6 +60,7 @@ employee_status = Active
 ```
 ---
 
+## Sidebar Components
 ```
 Dashboard
 
