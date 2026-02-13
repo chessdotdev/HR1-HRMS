@@ -44,7 +44,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
 
-
+```
 ### Job & Employee Flow
 job_posts
    ↓
@@ -57,8 +57,46 @@ employees → accounts → employee_job_info
 employee_onboarding → onboarding_documents → orientation_schedule
    ↓
 employee_status = Active
+```
+---
 
+```
+Dashboard
 
+Recruitment
+    Job Postings
+    Applicants
+    Interviews
+    Hiring Status
+
+Onboarding
+    New Hires
+    Tasks
+    Orientation Schedule
+
+Employees
+    Employee List
+    Departments
+    Roles & Access
+
+Performance
+    Evaluation Forms
+    Evaluation Results
+
+Recognition
+    Points & Rewards
+    Leaderboard
+
+Notifications
+
+Settings
+    Account Settings
+    System Settings
+
+Logout
+
+```
+---
 
 # modules/.htaccess
 Deny from all
