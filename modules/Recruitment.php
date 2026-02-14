@@ -1,5 +1,5 @@
 <?php
-require('../config/database.php');
+require_once '../config/Database.php';
 
 class Recruitment{
     private $conn;
@@ -27,6 +27,32 @@ class Recruitment{
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt;
+    }
+
+    public function getOpenJobs(){
+        $query = "SELECT * FROM ". $this->table_name. " WHERE status = 'open' ORDER BY created_at DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function getCloseJobs(){
+        $query = "SELECT * FROM ". $this->table_name. " WHERE status = 'closed' ORDER BY created_at DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function updateJobsStatus($id, $status){
+        $query = "UPDATE " . $this->table_name . " 
+        SET status = :status 
+        WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":status", $status);
+        $stmt->bindParam(":id", $id);
+
+        return $stmt->execute();
     }
 
 

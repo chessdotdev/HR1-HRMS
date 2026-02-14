@@ -15,7 +15,7 @@ require_once '../modules/Recruitment.php';
 //     ]
 // ];
 $recruitment = new Recruitment();
-$stmt = $recruitment->getAllJobs();
+$stmt = $recruitment->getOpenJobs();
 
 
     $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);

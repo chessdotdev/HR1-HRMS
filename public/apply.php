@@ -1,18 +1,21 @@
 <?php
 include '../includes/header.php';
 include '../includes/verify_auth.php';
+require_once '../modules/Applicants.php';
 
+$job_application = new Applicants();
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $firstName = trim($_POST['firstName'] ?? '');
-    $lastName = trim($_POST['lastName'] ?? '');
-    $middleName = trim($_POST['middleName'] ?? '');
-    $suffix = $_POST['suffix'] ?? '';
-    $birthdate = $_POST['birthdate'] ?? '';
-    $phone = trim($_POST['phone'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $gender = $_POST['gender'] ?? '';
-    $skills = trim($_POST['skills'] ?? '');
+    $firstName  = trim(filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_SPECIAL_CHARS));
+    $lastName   = trim(filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_SPECIAL_CHARS));
+    $middleName = trim(filter_input(INPUT_POST, 'middleName', FILTER_SANITIZE_SPECIAL_CHARS));
+    $suffix     = trim(filter_input(INPUT_POST, 'suffix', FILTER_SANITIZE_SPECIAL_CHARS));
+    $birthdate  = trim(filter_input(INPUT_POST, 'birthdate', FILTER_SANITIZE_SPECIAL_CHARS));
+    $phone      = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_NUMBER_INT);
+    $email      = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
+    $gender     = trim(filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_SPECIAL_CHARS));
+    $skills     = trim(filter_input(INPUT_POST, 'skills', FILTER_SANITIZE_SPECIAL_CHARS));
+    
     
     // Validation
     if (!$firstName) { $errors['firstName'] = "First Name is required"; }
@@ -24,53 +27,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$skills) { $errors['skills'] = "Skills are required"; }
     
     // Calculate age
-    $age = '';
+    $age = null;
     if ($birthdate && empty($errors['birthdate'])) {
         $birthDateObj = new DateTime($birthdate);
         $today = new DateTime();
         $age = $today->diff($birthDateObj)->y;
     }
     // echo $age->format('%y years %d days');    
-    echo $age;
+    // echo $age;
+    $allowed_suffixes = ['none', 'jr', 'sr', 'ii', 'iii', 'iv'];
+    if(!in_array(strtolower($suffix), $allowed_suffixes)){
+        $suffix = 'none';
+    }
+
+    $allowed_genders = ['Male', 'Female'];
+    if(!in_array($gender, $allowed_genders)){
+        $errors['gender'] = "Gender is required";
+    }
+
+    if(empty($errors)){
+        $applicant_id = $_SESSION['id'];
+        
+        $applyJob = $job_application->applyJob(
+            $applicant_id,
+            $firstName,
+            $lastName,
+            $middleName,
+            $suffix,
+            $birthdate,
+            $age,
+            $phone,
+            $gender,
+            $email,
+            $skills
+        );
+        if ($applyJob) {
+            echo "<div class='alert alert-success'>Application submitted successfully!</div>";
+        } else {
+            $errors['db'] = "Failed to submit application. Try again later.";
+        }
+
+    }
 }
 
 ?>
-
-<style>
-.shadcn-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    border-radius: 0.5rem;
-    border: 1px solid #e5e7eb;
-    background-color: #111827; /* dark neutral */
-    color: #ffffff;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.shadcn-btn:hover {
-    background-color: #1f2937;
-}
-
-.shadcn-btn:active {
-    transform: scale(0.98);
-}
-
-.shadcn-btn:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
-}
-
-.shadcn-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-</style>
 
 <div class="container py-4" style="max-width: 720px;">
     <div class="page-title text-center mb-4">
@@ -138,8 +138,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="row g-3 mt-1">
 
         <div class="col-sm-6">
-                    <label class="form-label" for="lastName">Phone <span class="required">*</span></label>
-                    <input type="number" class="form-control <?=isset($errors['phone']) ? 'is-invalid' : '';?>" id="phone" placeholder="delacruz@gmail.com" />
+                    <label class="form-label" for="Phone">Phone <span class="required">*</span></label>
+                    <input type="number" class="form-control <?=isset($errors['phone']) ? 'is-invalid' : '';?>" name="phone" placeholder="09123456789" />
                     <div class="invalid-feedback">Phone is required.</div>
                 </div>
 
@@ -173,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         <div class="d-flex justify-content-between mt-4">
-            <button type="submit" id="submit" class="shadcn-btn">
+            <button type="submit" id="submit" class="apply-btn">
                 Submit
             </button>
         </div>

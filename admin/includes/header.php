@@ -42,23 +42,17 @@ session_start();
                 </a>
             </li>
 
-            <!-- Tasks -->
+            <!-- recruit Dropdown -->
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link">
+                <a href="#recruitMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
                     <i><!-- svg icon --></i>
-                    <span>Task</span>
+                    <span>Recruitment</span>
                 </a>
-            </li>
-
-            <!-- Auth Dropdown -->
-            <li class="sidebar-item">
-                <a href="#authMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
-                    <i><!-- svg icon --></i>
-                    <span>Auth</span>
-                </a>
-                <ul id="authMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
-                    <li class="sidebar-item"><a href="#" class="sidebar-link">Login</a></li>
-                    <li class="sidebar-item"><a href="#" class="sidebar-link">Register</a></li>
+                <ul id="recruitMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
+                    <li class="sidebar-item"><a href="job_openings.php" class="sidebar-link">Job Posting</a></li>
+                    <li class="sidebar-item"><a href="applicants.php" class="sidebar-link">Applicants</a></li>
+                    <li class="sidebar-item"><a href="#" class="sidebar-link">Interviews</a></li>
+                    <li class="sidebar-item"><a href="#" class="sidebar-link">Hiring Status</a></li>
                 </ul>
             </li>
 
@@ -70,7 +64,7 @@ session_start();
                 </a>
                 <ul id="multiMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
 
-                    <!-- Two Links Nested -->
+                    <!-- Links Nested -->
                     <li class="sidebar-item">
                         <a href="#multiTwoMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
                             Two Links
