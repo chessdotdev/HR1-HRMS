@@ -61,6 +61,40 @@ session_start();
 .btn-primary:hover {
     background: #0b5ed7;
 }
+
+.apply-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    background-color: #111827; /* dark neutral */
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.apply-btn:hover {
+    background-color: #1f2937;
+}
+
+.apply-btn:active {
+    transform: scale(0.98);
+}
+
+.apply-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+
+.apply-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 </style>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
