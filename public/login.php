@@ -4,7 +4,7 @@
 require_once '../auth/Applicants_account.php';
 
 
-if (isset($_SESSION['username'])) {
+if (isset($_SESSION['applicant_username'])) {
     header("Location: index.php");
     exit();
 }
@@ -25,8 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $applicant_acc->loginApplicant($username, $password);
         
             if ($user) {
-                $_SESSION['id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
+                $_SESSION['applicant_id'] = $user['id'];
+                $_SESSION['applicant_username'] = $user['username'];
+                $_SESSION['applicant_role'] = $user['role'];
                 header("Location: dashboard.php");
                 exit();
             } else {

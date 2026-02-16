@@ -103,8 +103,8 @@ session_start();
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
                    <li class="nav-item"><a class="nav-link" href="index.php">Jobs</a></li>
-                <?php if(isset($_SESSION['username'])): ?>
-                    <li class="nav-item"><a class="nav-link" href="#">Hello, <?php echo htmlspecialchars($_SESSION['username']); ?></a></li>
+                <?php if(isset($_SESSION['applicant_username'])): ?>
+                    <li class="nav-item"><a class="nav-link" href="#">Hello, <?php echo htmlspecialchars($_SESSION['applicant_username']); ?></a></li>
                     <li class="nav-item"><a class="nav-link" href="../logout.php">Logout</a></li>
                 <?php else: ?>
                 

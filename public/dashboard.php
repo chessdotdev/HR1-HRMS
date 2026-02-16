@@ -1,5 +1,5 @@
 <?php
-include '../includes/verify_auth.php';
+include '../includes/verify_applicant.php';
 
 ?>
 

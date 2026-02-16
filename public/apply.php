@@ -1,6 +1,6 @@
 <?php
 include '../includes/header.php';
-include '../includes/verify_auth.php';
+include '../includes/verify_applicant.php';
 require_once '../modules/Applicants.php';
 
 $job_application = new Applicants();

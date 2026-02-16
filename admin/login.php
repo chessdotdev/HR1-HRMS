@@ -25,8 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $applicant_acc->loginAdmin($username, $password);
         
             if ($user) {
-                $_SESSION['id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
+                $_SESSION['admin_id'] = $user['id'];
+                $_SESSION['admin_username'] = $user['username'];
+                $_SESSION['admin_role'] = $user['role'];
                 header("Location: dashboard.php");
                 exit();
             } else {

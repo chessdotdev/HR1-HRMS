@@ -1,5 +1,7 @@
 <?php
 session_start();
+include './includes/verify_admin.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -99,7 +101,7 @@ session_start();
 
         <!-- Sidebar Footer -->
         <div class="sidebar-footer mt-auto">
-            <a href="#" class="sidebar-link">
+            <a href="../logout.php" class="sidebar-link">
                 <i><!-- svg icon --></i>
                 <span>Logout</span>
             </a>
