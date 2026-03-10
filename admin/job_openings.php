@@ -6,21 +6,21 @@ $current_page = basename($_SERVER['PHP_SELF']);
 $recruitment = new Recruitment();
 $message = "";
 
-// Handle POST requests
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // --- CREATE NEW JOB ---
     if (isset($_POST['form_type']) && $_POST['form_type'] === 'create_job') {
         $title = trim($_POST['title'] ?? '');
         $department = trim($_POST['department'] ?? '');
-        $description = trim($_POST['description'] ?? '');
-        $requirements = trim($_POST['requirements'] ?? '');
-
-        if ($title && $department) {
-            $result = $recruitment->createJob($title, $department, $description, $requirements);
-            $message = $result ? "Job posted successfully!" : "Failed to create job.";
+        $role = trim($_POST['role'] ?? '');
+        $qualifications = trim($_POST['qualifications'] ?? '');
+        
+        if (!$title || !$department  || !$role || !$qualifications) {
+            $message = "All fields are required.";  
         } else {
-            $message = "Title and Department are required!";
+            $result = $recruitment->createJob($title, $department, $role, $qualifications);
+            $message = $result ? "Job posted successfully!" : "Failed to create job.";
         }
     }
 
@@ -63,19 +63,19 @@ $closedJobs = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                         <input type="hidden" name="form_type" value="create_job">
                         <div class="mb-3">
                             <label class="form-label">Job Title</label>
-                            <input type="text" name="title" class="form-control" required>
+                            <input type="text" name="title" class="form-control" >
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Department</label>
-                            <input type="text" name="department" class="form-control" required>
+                            <input type="text" name="department" class="form-control" >
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea name="description" class="form-control" rows="3"></textarea>
+                            <label class="form-label">Role</label>
+                            <textarea name="role" class="form-control" rows="3"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Requirements</label>
-                            <textarea name="requirements" class="form-control" rows="3"></textarea>
+                            <label class="form-label">Qualifications</label>
+                            <textarea name="qualifications" class="form-control" rows="3"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Post Job</button>
                     </form>
@@ -125,7 +125,7 @@ $closedJobs = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Closed Jobs Below -->
     <div class="card mt-5">
-        <div class="card-header">Closed Job Openings</div>
+        <div class="card-header">Closed Jobs</div>
         <div class="card-body">
             <table class="table table-striped table-bordered align-middle">
                 <thead>

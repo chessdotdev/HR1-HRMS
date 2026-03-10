@@ -124,7 +124,7 @@ Allow HR users to post jobs, track applicants, and manage talent efficiently.
 
 ## Applicant Management
 - View all applicants per job posting  
-- Filter by status: Pending → Shortlisted → Interview → Hired/Rejected  
+- Filter by status: Pending → Interview → Hired/Rejected  
 - Candidate profile: Personal info, resume  
 - Schedule Interview, Send Email, Update Status  
 - Schedule interviews  
@@ -188,3 +188,27 @@ Allow HR users to post jobs, track applicants, and manage talent efficiently.
 
 ### Social Recognition
 - Manage the monthly/weekly leaderboard
+
+
+```
+
+Subject: Welcome to [Company Name]
+
+Dear [Applicant Name],
+
+Congratulations! You’ve successfully joined [Company Name].
+
+Your portal account is ready:
+
+Username: [username]
+
+Temporary Password: [password]
+
+Please log in to the portal to complete your onboarding tasks, review documents, and get started with your role.
+
+Welcome aboard!
+
+Best regards,
+[Company Name] HR Team
+
+```

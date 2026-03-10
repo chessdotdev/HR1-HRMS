@@ -11,14 +11,14 @@ class Recruitment{
        $this->conn = $db->connect();
     }
 
-    public function createJob($title, $department, $description, $requirements){
+    public function createJob($title, $department, $role, $qualifications){
         $query = "INSERT INTO ".  $this->table_name . 
-        "(title, department, description, requirements) VALUES (:title, :department, :description, :requirements)"; 
+        "(title, department, role, qualifications) VALUES (:title, :department, :role, :qualifications)"; 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':title', $title);
         $stmt->bindParam(':department', $department);
-        $stmt->bindParam(':description', $description);
-        $stmt->bindParam(':requirements', $requirements);
+        $stmt->bindParam(':role', $role);
+        $stmt->bindParam(':qualifications', $qualifications);
         return $stmt->execute();
     }
 

@@ -2,8 +2,13 @@
 include '../includes/header.php';
 include '../includes/verify_applicant.php';
 require_once '../modules/Applicants.php';
-
+  
 $job_application = new Applicants();
+
+// Get job ID and title from URL or POST (available before form submission)
+$job_id = $_GET['job_id'] ?? '';
+$job_title = $_GET['title'] ?? '';
+
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $firstName  = trim(filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_SPECIAL_CHARS));
@@ -15,7 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email      = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
     $gender     = trim(filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_SPECIAL_CHARS));
     $skills     = trim(filter_input(INPUT_POST, 'skills', FILTER_SANITIZE_SPECIAL_CHARS));
-    
+    $applicant_id = $_SESSION['applicant_id'];
+
+    /* overwrite get method */
+    $job_id = $_POST['job_id'] ?? $_GET['job_id'] ?? '';   
+    $job_title = $_POST['title'] ?? $_GET['title'] ?? ''; 
     
     // Validation
     if (!$firstName) { $errors['firstName'] = "First Name is required"; }
@@ -46,10 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if(empty($errors)){
-        $applicant_id = $_SESSION['id'];
         
         $applyJob = $job_application->applyJob(
             $applicant_id,
+            $job_id,
+            $job_title,
             $firstName,
             $lastName,
             $middleName,
@@ -61,17 +71,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email,
             $skills
         );
-        if ($applyJob) {
-            echo "<div class='alert alert-success'>Application submitted successfully!</div>";
+        if ($applyJob['success']) {
+            $message = "<div class='alert alert-success'>{$applyJob['message']}</div>";
         } else {
-            $errors['db'] = "Failed to submit application. Try again later.";
+            $message ="<div class='alert alert-danger'>{$applyJob['message']}</div>";
         }
 
     }
 }
 
 ?>
-
 <div class="container py-4" style="max-width: 720px;">
     <div class="page-title text-center mb-4">
         <h1 class="apply-title">Apply Now</h1>
@@ -79,21 +88,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            Fill out the form below to get started.
         </p>
     </div>
+    <?=$message ?? '' ?>
 
     <form action="apply.php" method="POST" id="applyForm" class="form-card p-4">
         <!-- Personal Info -->
-
+        <input type="hidden" name="job_id" value="<?=htmlspecialchars($job_id ?? '') ?>">
+        <input type="hidden" name="title" value="<?=htmlspecialchars($job_title ?? '') ?>">
         <div class="form-step" id="step-0">
             <h2 class="section-title heading-font">Personal Information</h2>
             <p class="section-desc">Please provide your basic personal details.</p>
             <div class="row g-3">
                 <div class="col-sm-6">
-                    <label class="form-label" for="firstName">First Name <span class="required">*</span></label>
+                    <label class="form-label" for="firstName">First Name <span class="required text-danger">*</span></label>
                     <input type="text" class="form-control <?=isset($errors['firstName']) ? 'is-invalid' : '';?>" name="firstName" placeholder="Juan" />
                     <div class="invalid-feedback">Firstname is required.</div>
                 </div>
                 <div class="col-sm-6">
-                    <label class="form-label" for="lastName">Last Name <span class="required">*</span></label>
+                    <label class="form-label" for="lastName">Last Name <span class="required text-danger">*</span></label>
                     <input type="text" class="form-control <?=isset($errors['lastName']) ? 'is-invalid' : '';?>" name="lastName" placeholder="Dela Cruz" />
                     <div class="invalid-feedback">Last name is required.</div>
                 </div>
@@ -121,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="row g-3 mt-1">
             <div class="col-sm-6">
-                <label class="form-label" for="birthdate">Birthdate <span class="required">*</span></label>
+                <label class="form-label" for="birthdate">Birthdate <span class="required text-danger">*</span></label>
                 <input type="date" id="birthdate" class="form-control <?=isset($errors['birthdate']) ? 'is-invalid' : '';?>" name="birthdate" />
                 <div class="invalid-feedback">Birthdate is required.</div>
             </div>
@@ -138,13 +149,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="row g-3 mt-1">
 
         <div class="col-sm-6">
-                    <label class="form-label" for="Phone">Phone <span class="required">*</span></label>
+                    <label class="form-label" for="Phone">Phone <span class="required text-danger">*</span></label>
                     <input type="number" class="form-control <?=isset($errors['phone']) ? 'is-invalid' : '';?>" name="phone" placeholder="09123456789" />
                     <div class="invalid-feedback">Phone is required.</div>
                 </div>
 
             <div class="col-sm-6">
-                <label class="form-label" for="gender">Gender</label>
+                <label class="form-label" for="gender">Gender <span class="required text-danger">*</span></label>
                 <select class="form-select <?=isset($errors['gender']) ? 'is-invalid' : '';?>" name="gender">
                     <option value=""></option>
                     <option value="Male">Male</option>
@@ -165,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="row g-3 mt-1">
             <div class="col-sm-12">
-                <label class="form-label" for="skills">Describe your skills</label>
+                <label class="form-label" for="skills">Describe your skills <span class="required text-danger">*</span> </label>
                 <textarea class="form-control <?=isset($errors['skills']) ? 'is-invalid' : '';?>" name="skills" placeholder="Describe your skills here..." rows="4"></textarea>
                     <div class="invalid-feedback">Describe your skills is required.</div>
                 </div>
@@ -177,8 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 Submit
             </button>
         </div>
-    </form>
-</div>
+</form>
 
 <script>
     const birthdateInput = document.getElementById('birthdate');

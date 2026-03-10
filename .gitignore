@@ -1,0 +1,6 @@
+# Local environment files
+.env
+
+
+# Dependencies
+vendor/

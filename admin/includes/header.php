@@ -28,7 +28,7 @@ include './includes/verify_admin.php';
                 <a href="dashboard.php">Admin</a>
             </div>
             <button class="toggle-btn btn btn-light me-2" type="button">
-                <i><img src="./assets/images/web.png" alt="" width="25px"></i>
+                <i><img class="toggle-image" src="./assets/images/collapse.png" alt="toggle-image"></i>
             </button>
             
         </div>
@@ -36,7 +36,7 @@ include './includes/verify_admin.php';
         <!-- Sidebar Navigation -->
         <ul class="sidebar-nav list-unstyled">
 
-            <!-- Profile -->
+            <!-- Dashboard -->
             <li class="sidebar-item">
                 <a href="dashboard.php" class="sidebar-link">
                     <i><img src="./assets/images/dashboard.png" alt="" width="25px"></i>
@@ -53,15 +53,15 @@ include './includes/verify_admin.php';
                 <ul id="recruitMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
                     <li class="sidebar-item"><a href="job_openings.php" class="sidebar-link">Job Posting</a></li>
                     <li class="sidebar-item"><a href="applicants.php" class="sidebar-link">Applicants</a></li>
-                    <li class="sidebar-item"><a href="#" class="sidebar-link">Interviews</a></li>
-                    <li class="sidebar-item"><a href="#" class="sidebar-link">Hiring Status</a></li>
+                    <li class="sidebar-item"><a href="interviews.php" class="sidebar-link">Interviews</a></li>
+                    <li class="sidebar-item"><a href="applicant_status.php" class="sidebar-link">Applicant Status</a></li>
                 </ul>
             </li>
 
             <!-- Multi Level Dropdown -->
             <li class="sidebar-item">
                 <a href="#multiMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
-                    <span>Multi Level</span>
+                    <span>####</span>
                     <i><!-- svg icon --></i>
                 </a>
                 <ul id="multiMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
@@ -82,12 +82,12 @@ include './includes/verify_admin.php';
             </li>
 
             <!-- Notifications -->
-            <li class="sidebar-item">
+            <!-- <li class="sidebar-item">
                 <a href="#" class="sidebar-link">
-                    <i><!-- svg icon --></i>
+                    <i>svg icon</i>
                     <span>Notif</span>
                 </a>
-            </li>
+            </li> -->
 
             <!-- Settings -->
             <li class="sidebar-item">

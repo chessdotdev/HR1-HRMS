@@ -66,21 +66,21 @@ $stmt = $recruitment->getOpenJobs();
                                 </div>
 
                                 <p class="card-text text-muted mb-4 flex-grow-1">
-                                    <?php echo nl2br(htmlspecialchars(substr($job['description'], 0, 220))); ?>...
+                                    <?php echo nl2br(htmlspecialchars(substr($job['role'], 0, 220))); ?>...
                                 </p>
 
                                 <div class="mt-auto">
-                                    <h6 class="fw-semibold mb-2">Key Requirements:</h6>
+                                    <h6 class="fw-semibold mb-2">Qualifications:</h6>
                                     <ul class="list-unstyled small text-muted mb-4">
                                         <?php 
-                                $reqs = array_filter(array_map('trim', explode("\n", $job['requirements'])));
+                                $reqs = array_filter(array_map('trim', explode("\n", $job['qualifications'])));
                                 foreach (array_slice($reqs, 0, 4) as $req) {
                                             if (trim($req)) echo '<li>• ' . htmlspecialchars(trim($req)) . '</li>';
                                         }
                                         ?>
                                     </ul>
 
-                                    <a href="apply.php?job_id=<?php echo $job['id'] ?? ''; ?>" 
+                                    <a href="apply.php?job_id=<?=$job['id'];?>&title=<?=urlencode($job['title']);?>" 
                                        class="btn btn-outline-primary w-100 rounded-pill">
                                         Apply Now
                                     </a>
