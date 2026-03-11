@@ -27,13 +27,23 @@ class Applicants {
         $skills
     ){
         //check if applicant already submitted
-        $checkQuery = "SELECT COUNT(*) FROM " . $this->table_name . " WHERE applicant_id = :applicant_id AND status = 'Pending'";
+        $checkQuery = "SELECT status FROM ". $this->table_name. " WHERE :applicant_id ORDER BY applied_at DESC LIMIT 1";
         $stmt = $this->conn->prepare($checkQuery);
         $stmt->bindParam(':applicant_id', $applicant_id, PDO::PARAM_INT);
         $stmt->execute();
+        $existingStatus = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if($stmt->fetchColumn() > 0){
-            return ['success' => false, 'message' => 'You have already applied.'];
+
+        if($existingStatus){
+            if ($existingStatus['status'] === 'Pending') {
+                return ['success' => false, 'message' => 'You already have a pending application.'];
+            }
+            if ($existingStatus['status'] === 'Interview') {
+                return ['success' => false, 'message' => 'You already have a scheduled interview.'];
+            }
+            if ($existingStatus['status'] === 'Hired') {
+                return ['success' => false, 'message' => 'You are already a hired employee.'];
+            }
         }
     
         $insertQuery = "INSERT INTO " . $this->table_name . " 
@@ -283,16 +293,20 @@ public function updateStatus($id,$status){
         // Get applicant info
         $app = $this->getApplicant($applicant_id);
         if(!$app) return;
-        
+
+        $year     = date('Y');
+        $lastname = strtolower(preg_replace('/\s+/', '', $app['lastname']));
+        $username = $lastname . $year . $app['apply_id'];
+
         $password = bin2hex(random_bytes(4));
         $hashed = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt = $this->conn->prepare("
-            INSERT INTO employees (applicant_id, email, password)
-            VALUES (:applicant_id, :email, :password)
+            INSERT INTO employees (applicant_id, username, password)
+            VALUES (:applicant_id, :username, :password)
         ");
-        $stmt->bindParam(':applicant_id', $applicant_id);
-        $stmt->bindParam(':email', $app['email']);
+        $stmt->bindParam(':applicant_id', $app['apply_id']);
+        $stmt->bindParam(':username', $username);
         $stmt->bindParam(':password', $hashed);
         $stmt->execute();
 
@@ -302,10 +316,10 @@ public function updateStatus($id,$status){
         $stmt->execute();
 
         // Send hiring email with login credentials
-        $this->sendHiringNotification($app['email'], $app['firstname'] . ' ' . $app['lastname'], $password);
+        $this->sendHiringNotification($app['email'], $app['firstname'] . ' ' . $app['lastname'], $username, $password);
     }
     
-    private function sendHiringNotification($email, $name, $password){
+    private function sendHiringNotification($email, $name, $username, $password){
         if($email && !empty($email)){
             require_once '../MailService.php';
             
@@ -334,7 +348,7 @@ public function updateStatus($id,$status){
                         <p>We are delighted to inform you that you have been <strong>HIRED</strong>!</p>
                         <div class='credentials'>
                             <p><strong>Your Employee Portal Account:</strong></p>
-                            <p>Email: <strong>$email</strong></p>
+                            <p>Email: <strong>$username</strong></p>
                             <p>Temporary Password: <strong>$password</strong></p>
                         </div>
                         <p>Please log in to the employee portal to complete your onboarding tasks and review important documents.</p>
