@@ -11,11 +11,12 @@ include './includes/verify_admin.php';
     <title>HR System</title>
     <link href="../public/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="../public/assets/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/css/sidebar.css">
-     <!-- icons -->
-    <link href="https://cdn.lineicons.com/5.1/line/lineicons.css" rel="stylesheet"/>
+    <!-- icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/sidebar.css">
+   
 </head>
 
 <body>
@@ -28,9 +29,8 @@ include './includes/verify_admin.php';
                 <a href="dashboard.php">Admin</a>
             </div>
             <button class="toggle-btn btn btn-light me-2" type="button">
-                <i><img class="toggle-image" src="./assets/images/collapse.png" alt="toggle-image"></i>
+                <i class="bi bi-list" id="toggle-icon"></i>
             </button>
-            
         </div>
 
         <!-- Sidebar Navigation -->

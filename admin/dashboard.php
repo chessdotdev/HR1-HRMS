@@ -1,12 +1,17 @@
 
 
 <?php include 'includes/header.php'; ?>
+<style>
+    body{
+        font-size:11px;
+    }
+</style>
 
     <!-- Main Content -->
     <div class="main p-3">
         <div class="p-3 mb-3 bg-light rounded-3">
           <div class="container-fluid py-3">
-            <h1 class="display-5 fw-bold">HR-1 Management System</h1>
+            <h1 class="display-6 fw-bold">HR-1 Management System</h1>
         </div>
     </div>
 
