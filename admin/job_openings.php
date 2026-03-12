@@ -13,13 +13,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['form_type']) && $_POST['form_type'] === 'create_job') {
         $title = trim($_POST['title'] ?? '');
         $department = trim($_POST['department'] ?? '');
-        $role = trim($_POST['role'] ?? '');
+        $responsibilities = trim($_POST['responsibilities'] ?? '');
         $qualifications = trim($_POST['qualifications'] ?? '');
-        
-        if (!$title || !$department  || !$role || !$qualifications) {
+        $benefits = trim($_POST['benefits'] ?? '');
+        $location = trim($_POST['location'] ?? '');
+
+            //clean multi-line text
+            function clean_multiline($text) {
+                $lines = explode("\n", $text);
+                $lines = array_map('trim', $lines); // remove extra spaces
+                $lines = array_filter($lines, fn($line) => $line !== ''); // remove empty lines  
+                 /*
+                validate line if not empty so If the line is empty (""), the function returns false and array_filter removes it
+                 */
+                return implode("\n", $lines);
+            }
+            
+            $responsibilities = clean_multiline($responsibilities);
+            $qualifications = clean_multiline($qualifications);
+            $benefits = clean_multiline($benefits);
+
+        if (!$title || !$department  || !$responsibilities || !$qualifications) {
             $message = "All fields are required.";  
         } else {
-            $result = $recruitment->createJob($title, $department, $role, $qualifications);
+            $result = $recruitment->createJob($title, $department, $responsibilities, $qualifications, $benefits, $location);
             $message = $result ? "Job posted successfully!" : "Failed to create job.";
         }
     }
@@ -70,12 +87,20 @@ $closedJobs = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                             <input type="text" name="department" class="form-control" >
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Role</label>
-                            <textarea name="role" class="form-control" rows="3"></textarea>
+                            <label class="form-label">Responsibilities</label>
+                            <textarea name="responsibilities" class="form-control" rows="2"></textarea>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Qualifications</label>
-                            <textarea name="qualifications" class="form-control" rows="3"></textarea>
+                            <textarea name="qualifications" class="form-control" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Benefits</label>
+                            <textarea name="benefits" class="form-control" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <textarea name="location" class="form-control" rows="2"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Post Job</button>
                     </form>

@@ -57,20 +57,21 @@ $stmt = $recruitment->getOpenJobs();
                     <div class="col-md-6 col-lg-4">
                         <div class="card job-card h-100 border-0 shadow-sm hover-shadow transition-all">
                             <div class="card-body p-4 d-flex flex-column">
-                                <h5 class="card-title fw-bold text-primary mb-3"><?php echo htmlspecialchars($job['title']); ?></h5>
+                                <h5 class="card-title fw-bold text-dark display-6 mb-3"><?php echo htmlspecialchars($job['title']); ?></h5>
                                 
                                 <div class="mb-3">
                                     <span class="badge bg-light text-dark border px-3 py-2 me-2">
                                         <?php echo htmlspecialchars($job['department']); ?>
                                     </span>
                                 </div>
+                                <?php if(!empty($job['location'])): ?>
+                                    <div class="mb-2">
+                                        <span class="text-muted"><strong>Location:</strong> <?php echo htmlspecialchars($job['location']); ?></span>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="mb-3">
+                                <h6 class="fw-bold mb-2">Responsibilities:</h6>
 
-                                <p class="card-text text-muted mb-4 flex-grow-1">
-                                    <?php echo nl2br(htmlspecialchars(substr($job['role'], 0, 220))); ?>...
-                                </p>
-
-                                <div class="mt-auto">
-                                    <h6 class="fw-semibold mb-2">Qualifications:</h6>
                                     <ul class="list-unstyled small text-muted mb-4">
                                         <?php 
                                 $reqs = array_filter(array_map('trim', explode("\n", $job['qualifications'])));
@@ -79,6 +80,30 @@ $stmt = $recruitment->getOpenJobs();
                                         }
                                         ?>
                                     </ul>
+                                </div>
+                                <div class="mt-auto">
+                                    <h6 class="fw-bold mb-2">Qualifications:</h6>
+                                    <ul class="list-unstyled small text-muted mb-4">
+                                        <?php 
+                                $reqs = array_filter(array_map('trim', explode("\n", $job['qualifications'])));
+                                foreach (array_slice($reqs, 0, 4) as $req) {
+                                            if (trim($req)) echo '<li>• ' . htmlspecialchars(trim($req)) . '</li>';
+                                        }
+                                        ?>
+                                    </ul>
+                                <?php if(!empty($job['benefits'])): ?>
+                                    <div class="mb-3">
+                                        <strong>Benefits:</strong>
+                                        <ul class="list-unstyled small text-muted mb-0">
+                                            <?php 
+                                            $benefits = array_filter(array_map('trim', explode("\n", $job['benefits'])));
+                                            foreach ($benefits as $benefit) {
+                                                echo '<li>• ' . htmlspecialchars($benefit) . '</li>';
+                                            }
+                                            ?>
+                                        </ul>
+                                    </div>
+                                <?php endif; ?>
 
                                     <a href="apply.php?job_id=<?=$job['id'];?>&title=<?=urlencode($job['title']);?>" 
                                        class="btn btn-outline-primary w-100 rounded-pill">
