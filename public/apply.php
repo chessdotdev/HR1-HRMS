@@ -19,7 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone      = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_NUMBER_INT);
     $email      = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
     $gender     = trim(filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_SPECIAL_CHARS));
-    $skills     = trim(filter_input(INPUT_POST, 'skills', FILTER_SANITIZE_SPECIAL_CHARS));
+    $skills = $_POST['skills'] ?? '';
+    $skills = trim($skills);
     $applicant_id = $_SESSION['applicant_id'];
 
     /* overwrite get method */
@@ -29,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validation
     if (!$firstName) { $errors['firstName'] = "First Name is required"; }
     if (!$lastName) { $errors['lastName'] = "Last Name is required"; }
+    if (!$middleName) { $errors['middlename'] = "Middle Name is required"; }
     if (!$birthdate) { $errors['birthdate'] = "Birthdate is required"; }
     if (!$phone) { $errors['phone'] = "Phone is required"; }
     if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) { $errors['email'] = "Valid Email is required"; }
@@ -81,12 +83,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@400;600&display=swap');
+     body {
+    background-color: #fafaf8;
+    font-family: 'Inter', sans-serif;
+    color: #1a1a1a;
+    }
+
+    .navbar {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e8e8e4;
+    padding: 1rem 0;
+}
+.navbar-brand {
+    font-family: 'Lora', serif;
+    font-size: 1.1rem;
+    color: #1a1a1a !important;
+    letter-spacing: 0.01em;
+}
+.nav-link { color: #555 !important; font-size: 0.875rem; }
+.nav-link:hover { color: #1a1a1a !important; }
+</style>
+
 <div class="container py-4" style="max-width: 720px;">
     <div class="page-title text-center mb-4">
         <h1 class="apply-title">Apply Now</h1>
         <p class="page-subtitle mx-auto" style="max-width: 420px;">
            Fill out the form below to get started.
         </p>
+        <div class="card mt-3" style="border-left: 4px solid #f59e0b;">
+    <div class="card-body">
+        <h6 class="mb-2" style="font-size: 0.9rem; font-weight: 600;">
+            <i class="bi bi-info-circle"></i> Important Notice
+        </h6>
+        <p class="mb-0" style="font-size: 0.7rem; color: #71717a;">
+        Please review your answers carefully before submitting this form. Once the form is submitted, you will not be able to edit or change your responses. Make sure all information provided is accurate and complete.        </p>
+    </div>
+</div>
     </div>
     <?=$message ?? '' ?>
 
@@ -113,8 +147,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="row g-3 mt-1">
             <div class="col-sm-6">
-                <label class="form-label" for="middleName">Middle Name</label>
-                <input type="text" class="form-control" name="middleName" placeholder="Santos" />
+                <label class="form-label" for="middleName">Middle Name <span class="required text-danger">*</span></label>
+                <input type="text" class="form-control <?=isset($errors['middlename']) ? 'is-invalid' : '';?>" name="middleName" placeholder="Santos" />
+                <div class="invalid-feedback">Middle name is required.</div>
             </div>
             <div class="col-sm-6">
                 <label class="form-label" for="suffix">Suffix</label>

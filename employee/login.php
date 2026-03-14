@@ -1,8 +1,13 @@
 <?php
 session_start();
-require_once '../auth/Admin.php';
+require_once '../modules/Employee.php';
 
-$applicant_acc = new Admin();
+if (isset($_SESSION['employee_id'])) {
+    header("Location: dashboard.php");
+    exit();
+}
+
+$employee = new Employee();
 $messageErr = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -15,13 +20,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($messageErr)) {
         try {
-            $user = $applicant_acc->loginAdmin($username, $password);
-
+            $user = $employee->loginEmployee($username, $password);
             if ($user) {
-                $_SESSION['admin_id'] = $user['id'];
-                $_SESSION['admin_username'] = $user['username'];
-                $_SESSION['admin_role'] = $user['role'];
-                header("Location: dashboard.php");
+                $_SESSION['employee_id'] = $user['employee_id'];
+                $_SESSION['employee_username'] = $user['username'];
+                $_SESSION['employment_status'] = $user['employment_status'];
+                $_SESSION['onboarding_status'] = $user['onboarding_status'];
+                
+                // Redirect based on employment status
+                if ($user['employment_status'] === 'New Hire') {
+                    header("Location: onboarding.php");
+                } else {
+                    header("Location: dashboard.php");
+                }
                 exit();
             } else {
                 $messageErr = "Invalid username or password.";
@@ -38,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login — HR Portal</title>
+    <title>Employee Login — HR Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
@@ -192,43 +203,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         opacity: 0.85;
     }
 
-    .divider {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin: 1.25rem 0;
-        color: #a1a1aa;
-        font-size: 0.75rem;
-    }
-
-    .divider::before,
-    .divider::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: #e4e4e7;
-    }
-
-    .register-link {
-        margin-top: 1.25rem;
-        text-align: center;
-        font-size: 0.8rem;
-        color: #71717a;
-    }
-
-    .register-link a {
-        color: #09090b;
-        font-weight: 500;
-        text-decoration: underline;
-        text-underline-offset: 3px;
-        text-decoration-color: #d4d4d8;
-        transition: text-decoration-color 0.15s;
-    }
-
-    .register-link a:hover {
-        text-decoration-color: #09090b;
-    }
-
     .footer-note {
         text-align: center;
         margin-top: 1.5rem;
@@ -240,9 +214,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="login-card">
         <div class="login-header">
-            <div class="login-logo">🏨</div>
-            <h1 class="login-title">Admin Portal</h1>
-            <p class="login-subtitle">Sign in to your admin account</p>
+            <div class="login-logo">👤</div>
+            <h1 class="login-title">Employee Portal</h1>
+            <p class="login-subtitle">Sign in to your employee account</p>
         </div>
 
         <div class="form-card">
@@ -254,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="field-group">
                     <label class="field-label" for="username">Username</label>
                     <input type="text" class="field-input" id="username" name="username"
-                        placeholder="admin"
+                        placeholder="Enter your username"
                         value="<?= isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '' ?>">
                 </div>
 
@@ -267,15 +241,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="btn-login">
                     Sign in →
                 </button>
-            </form> 
-        </div>
-
-        <div class="register-link">
-            Don't have an account? <a href="register.php">Create one</a>
+            </form>
         </div>
 
         <div class="footer-note">
-            Hotel &amp; Restaurant HR System
+            Hotel &amp; Restaurant Employee Portal
         </div>
     </div>
 

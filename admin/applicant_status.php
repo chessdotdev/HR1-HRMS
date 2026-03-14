@@ -11,11 +11,9 @@ $applicants = $applicantObj->getApplicants($status);
 <?php include 'includes/header.php'; ?>
 
 <!-- content -->
-
 <div class="main p-3">
     <h2>Applicant Status</h2>
 
-    <!-- Status Filter -->
     <div class="mb-3">
         <form method="GET" action="applicant_status.php" class="d-flex align-items-center gap-3">
             <label for="statusFilter" class="form-label fw-semibold mb-0">
@@ -34,13 +32,15 @@ $applicants = $applicantObj->getApplicants($status);
         </form>
     </div>
 
-    <!-- Applicants Table -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead class="table-light">
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>Position</th>
+                    <th>Age</th>
+                    <th>Gender</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Applied at</th>
@@ -53,6 +53,9 @@ $applicants = $applicantObj->getApplicants($status);
                 <tr>
                     <td><?= $i++ ?></td>
                     <td><?= htmlspecialchars($app['firstname'].' '.$app['lastname']) ?></td>
+                    <td><?= htmlspecialchars($app['job_title']) ?></td>
+                    <td><?= htmlspecialchars($app['age']) ?></td>
+                    <td><?= htmlspecialchars($app['gender']) ?></td>
                     <td><?= htmlspecialchars($app['email']) ?></td>
                     <td><?= htmlspecialchars($app['phone']) ?></td>
                     <td><?= htmlspecialchars($app['applied_at']) ?></td>

@@ -1,10 +1,18 @@
 <?php
 require_once '../modules/Recruitment.php';
+require_once '../config/Database.php';
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
 $recruitment = new Recruitment();
 $message = "";
+
+// Fetch active departments
+$db = new Database();
+$conn = $db->connect();
+$deptStmt = $conn->prepare("SELECT name FROM departments WHERE status = 'Active' ORDER BY name ASC");
+$deptStmt->execute();
+$departments = $deptStmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -68,7 +76,6 @@ $closedJobs = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 <div class="main p-3">
     <div class="row">
 
-        <!-- Post New Job -->
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">Post New Job Opening</div>
@@ -84,7 +91,15 @@ $closedJobs = $stmt1->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Department</label>
-                            <input type="text" name="department" class="form-control" >
+                            <select name="department" class="form-select" >
+                                <option value="">Select department</option>
+                                <?php foreach ($departments as $dept): ?>
+                                    <option value="<?= htmlspecialchars($dept['name']) ?>"><?= htmlspecialchars($dept['name']) ?></option>
+                                <?php endforeach; ?>
+                                <?php if (empty($departments)): ?>
+                                    <option disabled>No active departments found</option>
+                                <?php endif; ?>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Responsibilities</label>
@@ -148,7 +163,6 @@ $closedJobs = $stmt1->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <!-- Closed Jobs Below -->
     <div class="card mt-5">
         <div class="card-header">Closed Jobs</div>
         <div class="card-body">

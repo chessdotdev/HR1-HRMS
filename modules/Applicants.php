@@ -27,7 +27,7 @@ class Applicants {
         $skills
     ){
         //check if applicant already submitted
-        $checkQuery = "SELECT status FROM ". $this->table_name. " WHERE :applicant_id ORDER BY applied_at DESC LIMIT 1";
+        $checkQuery = "SELECT status FROM ". $this->table_name. " WHERE applicant_id = :applicant_id ORDER BY applied_at DESC LIMIT 1";
         $stmt = $this->conn->prepare($checkQuery);
         $stmt->bindParam(':applicant_id', $applicant_id, PDO::PARAM_INT);
         $stmt->execute();

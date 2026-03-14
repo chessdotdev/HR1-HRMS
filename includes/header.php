@@ -6,7 +6,7 @@ session_start();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>HR System</title>
+    <title>Hotel & Restaurant</title>
     <link href="../public/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="../public/assets/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="../public/assets/style.css">
@@ -31,7 +31,14 @@ session_start();
         color: #09090b !important;
         font-weight: 600;
     }
-
+    .apply-btn{
+        background-color: black;
+        border-color: #0d6efd;
+        color: white;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: none;
+    }
 </style>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -46,7 +53,6 @@ session_start();
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- ← Add id="navbarNav" to the collapse div -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="index.php">Jobs</a></li>

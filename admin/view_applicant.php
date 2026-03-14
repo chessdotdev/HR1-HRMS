@@ -92,12 +92,14 @@ include 'includes/header.php';
             </div>
         </div>
     <?php else: ?>
-        <!-- Applicant Header -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
                     <div>
-                        <h1 class="h2 mb-1 fw-bold text-dark"><?= htmlspecialchars($app['firstname'].' '.$app['lastname']). ' ' ?><?=ucfirst($app['suffix']) ? ucfirst($app['suffix']) : null ?></h1>
+                        <h1 class="h2 mb-1 fw-bold text-dark">
+                            <?= htmlspecialchars($app['firstname'].' '.$app['lastname']). ' ' ?>
+                            <?=ucfirst($app['suffix']) ? ucfirst($app['suffix']).'.' : null ?>
+                        </h1>
                         <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-<?= strtolower($app['status']) == 'interview' ? 'info' : 'secondary' ?> fs-6 px-3 py-2">
                             <?= $app['status'] ?>
@@ -113,7 +115,6 @@ include 'includes/header.php';
         </div>
 
         <div class="row g-4">
-            <!-- Main Info Card -->
             <div class="col-lg-8">
                 <div class="card shadow-lg border-0 h-100">
                     <div class="card-body p-4">
@@ -155,7 +156,6 @@ include 'includes/header.php';
                 </div>
             </div>
 
-            <!-- Action Buttons Card -->
             <div class="col-lg-4">
                 <div class="card shadow-lg border-0 h-100">
                     <div class="card-header bg-transparent border-0 pb-0">
@@ -165,13 +165,12 @@ include 'includes/header.php';
                         <div class="d-grid gap-2 mb-4">
                             <form method="POST" action="update_status.php" class="d-grid gap-2">
                                 <input type="hidden" name="id" value="<?= $app['apply_id'] ?>">
-                                <button type="submit" name="status" value="Rejected" class="btn btn-outline-danger btn-lg shadow-sm border-2">
+                                <button type="submit" name="status" value="Rejected" class="btn btn-outline-danger btn-lg shadow-sm border-2" onclick="return confirm('Are you sure you want to reject this applicant?' )">
                                     <i class="fas fa-times-circle me-2"></i>Reject
                                 </button>
                             </form>
                         </div>
 
-                        <!-- Schedule Interview Button -->
                         <button class="btn btn-warning btn-lg w-100 shadow-sm mb-3" data-bs-toggle="modal" data-bs-target="#interviewModal">
                             <i class="fas fa-calendar-plus me-2"></i>Schedule Interview
                         </button>
@@ -180,7 +179,6 @@ include 'includes/header.php';
             </div>
         </div>
 
-        <!-- Modern Schedule Interview Modal -->
         <div class="modal fade" id="interviewModal" tabindex="-1" aria-labelledby="interviewModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-xl">
@@ -213,8 +211,8 @@ include 'includes/header.php';
                             <div class="mb-0">
                                 <label class="form-label fw-semibold mb-2">Interview Type</label>
                                 <select name="type" class="form-select form-select-lg shadow-sm">
-                                    <option value="Online"> Online (Video Call)</option>
-                                    <option value="Onsite"> Onsite (In-person)</option>
+                                    <option value="Online"> Online</option>
+                                    <option value="Onsite"> Onsite</option>
                                 </select>
                             </div>
                         </div>

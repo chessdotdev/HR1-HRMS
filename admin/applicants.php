@@ -11,7 +11,6 @@ $applicants = $applicantObj->getApplicants('Pending');
 
 <div class="main p-3">
 
-    <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0">Pending Applications</h2>
         <span class="badge bg-warning text-dark fs-6">
@@ -19,7 +18,6 @@ $applicants = $applicantObj->getApplicants('Pending');
         </span>
     </div>
 
-    <!-- Card Container -->
     <div class="card shadow-sm border-0">
         <div class="card-body">
 
@@ -49,7 +47,6 @@ $applicants = $applicantObj->getApplicants('Pending');
 
                             <td><?= $i++ ?></td>
 
-                            <!-- Applicant Name with Avatar -->
                             <td>
                                 <div class="d-flex align-items-center gap-2">
 
@@ -71,7 +68,6 @@ $applicants = $applicantObj->getApplicants('Pending');
 
                             <td><?= htmlspecialchars($app['phone']) ?></td>
 
-                            <!-- Skills Shortened -->
                             <td class="text-muted small" style="max-width:250px;">
                                 <?php 
                                 $skills = htmlspecialchars($app['skills'] ?? '');
@@ -81,14 +77,12 @@ $applicants = $applicantObj->getApplicants('Pending');
 
                             <td><?= htmlspecialchars($app['applied_at']) ?></td>
 
-                            <!-- Status Badge -->
                             <td>
                                 <span class="badge bg-warning text-dark">
                                     <?= htmlspecialchars($app['status']) ?>
                                 </span>
                             </td>
 
-                            <!-- Action -->
                             <td>
                                 <a href="view_applicant.php?id=<?= $app['apply_id'] ?>" 
                                    class="btn btn-sm btn-primary">

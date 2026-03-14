@@ -9,12 +9,12 @@ include './includes/verify_admin.php';
 <head>
     <meta charset="UTF-8">
     <title>HR System</title>
-    <link href="../public/assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../public/assets/css/style.css" rel="stylesheet">
+    <!-- <link href="../admin/assets/css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/sidebar.css">
    
 </head>
@@ -39,62 +39,105 @@ include './includes/verify_admin.php';
             <!-- Dashboard -->
             <li class="sidebar-item">
                 <a href="dashboard.php" class="sidebar-link">
-                    <i><img src="./assets/images/dashboard.png" alt="" width="25px"></i>
+                    <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
 
-            <!-- recruit Dropdown -->
+            <!-- Recruitment Dropdown -->
             <li class="sidebar-item">
                 <a href="#recruitMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
-                    <i><!-- svg icon --></i>
+                    <i class="bi bi-people"></i>
                     <span>Recruitment</span>
                 </a>
                 <ul id="recruitMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
-                    <li class="sidebar-item"><a href="job_openings.php" class="sidebar-link">Job Posting</a></li>
+                    <li class="sidebar-item"><a href="job_openings.php" class="sidebar-link">Job Postings</a></li>
                     <li class="sidebar-item"><a href="applicants.php" class="sidebar-link">Applicants</a></li>
                     <li class="sidebar-item"><a href="interviews.php" class="sidebar-link">Interviews</a></li>
-                    <li class="sidebar-item"><a href="applicant_status.php" class="sidebar-link">Applicant Status</a></li>
+                    <li class="sidebar-item"><a href="applicant_status.php" class="sidebar-link">Hiring Status</a></li>
                 </ul>
             </li>
 
-            <!-- Multi Level Dropdown -->
+            <!-- Onboarding Dropdown -->
             <li class="sidebar-item">
-                <a href="#multiMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
-                    <span>####</span>
-                    <i><!-- svg icon --></i>
+                <a href="#onboardingMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
+                    <i class="bi bi-person-check"></i>
+                    <span>Onboarding</span>
                 </a>
-                <ul id="multiMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
+                <ul id="onboardingMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
+                    <li class="sidebar-item"><a href="new_hires.php" class="sidebar-link">New Hires</a></li>
+                    <li class="sidebar-item"><a href="onboarding_tasks.php" class="sidebar-link">Tasks</a></li>
+                    <li class="sidebar-item"><a href="orientation_schedule.php" class="sidebar-link">Orientation Schedule</a></li>
+                </ul>
+            </li>
 
-                    <!-- Links Nested -->
-                    <li class="sidebar-item">
-                        <a href="#multiTwoMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
-                            Two Links
-                        </a>
-                        <ul id="multiTwoMenu" class="collapse list-unstyled" data-bs-parent="#multiMenu">
-                            <li class="sidebar-item"><a href="#" class="sidebar-link">Link1</a></li>
-                            <li class="sidebar-item"><a href="#" class="sidebar-link">Link2</a></li>
-                            <li class="sidebar-item"><a href="#" class="sidebar-link">Link3</a></li>
-                        </ul>
-                    </li>
+            <!-- Employees Dropdown -->
+            <li class="sidebar-item">
+                <a href="#employeesMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
+                    <i class="bi bi-person-badge"></i>
+                    <span>Employees</span>
+                </a>
+                <ul id="employeesMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
+                    <li class="sidebar-item"><a href="employee_list.php" class="sidebar-link">Employee List</a></li>
+                    <li class="sidebar-item"><a href="departments.php" class="sidebar-link">Departments</a></li>
+                </ul>
+            </li>
 
+            <!-- Performance Dropdown -->
+            <li class="sidebar-item">
+                <a href="#performanceMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
+                    <i class="bi bi-graph-up"></i>
+                    <span>Performance</span>
+                </a>
+                <ul id="performanceMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
+                    <li class="sidebar-item"><a href="evaluation_forms.php" class="sidebar-link">Evaluation Forms</a></li>
+                    <li class="sidebar-item"><a href="evaluation_results.php" class="sidebar-link">Evaluation Results</a></li>
+                </ul>
+            </li>
+
+            <!-- Recognition Dropdown -->
+            <li class="sidebar-item">
+                <a href="#recognitionMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
+                    <i class="bi bi-trophy"></i>
+                    <span>Recognition</span>
+                </a>
+                <ul id="recognitionMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
+                    <li class="sidebar-item"><a href="points_rewards.php" class="sidebar-link">Points & Rewards</a></li>
+                    <li class="sidebar-item"><a href="leaderboard.php" class="sidebar-link">Leaderboard</a></li>
+                </ul>
+            </li>
+
+            <!-- RBAC Module -->
+            <li class="sidebar-item">
+                <a href="#rbacMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
+                    <i class="bi bi-shield-lock"></i>
+                    <span>RBAC</span>
+                </a>
+                <ul id="rbacMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
+                    <li class="sidebar-item"><a href="roles.php" class="sidebar-link">Roles</a></li>
+                    <li class="sidebar-item"><a href="permissions.php" class="sidebar-link">Permissions</a></li>
+                    <li class="sidebar-item"><a href="user_roles.php" class="sidebar-link">User Roles</a></li>
                 </ul>
             </li>
 
             <!-- Notifications -->
-            <!-- <li class="sidebar-item">
-                <a href="#" class="sidebar-link">
-                    <i>svg icon</i>
-                    <span>Notif</span>
+            <li class="sidebar-item">
+                <a href="notifications.php" class="sidebar-link">
+                    <i class="bi bi-bell"></i>
+                    <span>Notifications</span>
                 </a>
-            </li> -->
+            </li>
 
             <!-- Settings -->
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link">
-                    <i><!-- svg icon --></i>
+                <a href="#settingsMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
+                    <i class="bi bi-gear"></i>
                     <span>Settings</span>
                 </a>
+                <ul id="settingsMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
+                    <li class="sidebar-item"><a href="account_settings.php" class="sidebar-link">Account Settings</a></li>
+                    <li class="sidebar-item"><a href="system_settings.php" class="sidebar-link">System Settings</a></li>
+                </ul>
             </li>
 
         </ul>
@@ -102,7 +145,7 @@ include './includes/verify_admin.php';
         <!-- Sidebar Footer -->
         <div class="sidebar-footer mt-auto">
             <a href="../logout.php" class="sidebar-link">
-                <i><!-- svg icon --></i>
+                <i class="bi bi-box-arrow-right"></i>
                 <span>Logout</span>
             </a>
         </div>

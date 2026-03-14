@@ -33,7 +33,7 @@ class MailService {
         $mail->Port       = $_ENV['SMTP_PORT'];                                    
 
         //Recipients
-        $mail->setFrom($_ENV['SMTP_FROM'], $_ENV['SMTP_FROM_NAME']); // Sender Email and name
+        $mail->setFrom($_ENV['SMTP_FROM'], $_ENV['SMTP_FROM_NAME']); // S   ender Email and name
         $mail->addAddress($to);     //Add a recipient email  
         $mail->addReplyTo($_ENV['SMTP_FROM'], $_ENV['SMTP_FROM_NAME']); // reply to sender email
 

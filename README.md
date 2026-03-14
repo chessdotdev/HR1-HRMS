@@ -190,6 +190,7 @@ Allow HR users to post jobs, track applicants, and manage talent efficiently.
 - Manage the monthly/weekly leaderboard
 
 
+## Sample email for hired applicants
 ```
 
 Subject: Welcome to [Company Name]
@@ -212,326 +213,221 @@ Best regards,
 [Company Name] HR Team
 
 ```
+## Sample Opening Jobs
 ```
-Job Openings – Luxor Grand Hotel
 1. Front Desk Executive
-
 Department: Front Office
 Location: Luxor Grand Hotel, Downtown City
 Responsibilities:
 
 Greet and welcome guests with a friendly attitude
-
 Manage check-ins and check-outs efficiently
-
 Handle reservations and guest inquiries
-
 Coordinate with housekeeping and other departments
-
 Maintain accurate records of guest information
+
 Qualifications:
 
 High school diploma or equivalent
-
 Previous hospitality or customer service experience preferred
-
 Excellent communication and interpersonal skills
-
 Ability to work flexible shifts, including weekends and holidays
+
 Benefits:
 
 Competitive salary
-
 Staff meals provided
-
 Health insurance
-
 Accommodation options (if required)
-
 Training and career development programs
 
-2. Chef
 
+2. Head Chef
 Department: Kitchen
 Location: Luxor Grand Hotel, Downtown City
 Responsibilities:
 
-Prepare and cook menu items according to recipes
+Lead and manage the kitchen team daily operations
+Plan, develop, and update menus seasonally
+Ensure food quality, consistency, and presentation standards
+Monitor kitchen inventory and coordinate with suppliers
+Enforce food safety and sanitation regulations
 
-Maintain kitchen hygiene and safety standards
-
-Manage inventory and order supplies
-
-Train and supervise kitchen staff
-
-Collaborate with management on menu planning
 Qualifications:
 
-Culinary degree or equivalent experience
+Culinary degree or equivalent professional training
+Minimum 3 years experience in a similar role
+Strong leadership and team management skills
+Knowledge of local and international cuisine
 
-Minimum 3 years working in a professional kitchen
-
-Knowledge of food safety regulations
-
-Strong leadership and teamwork skills
 Benefits:
 
 Competitive salary
-
 Staff meals provided
+Health insurance
+Performance bonuses
+Training and career development programs
 
-Health and accident insurance
 
-Opportunity for promotion
-
-Professional development workshops
-
-3. Waitstaff
-
+3. Restaurant Supervisor
 Department: Food & Beverage
 Location: Luxor Grand Hotel, Downtown City
 Responsibilities:
 
-Take customer orders accurately
+Oversee daily dining room and bar operations
+Manage and schedule F&B staff
+Ensure high standards of guest service and satisfaction
+Handle guest complaints professionally and promptly
+Monitor stock levels and coordinate with the kitchen team
 
-Serve food and beverages efficiently
-
-Ensure guest satisfaction
-
-Maintain cleanliness of tables and dining area
-
-Collaborate with kitchen and bar staff
 Qualifications:
 
-Previous restaurant service experience preferred
+Minimum 2 years F&B supervisory experience
+Strong interpersonal and leadership skills
+Knowledge of food and beverage service standards
+Ability to work under pressure in a fast-paced environment
 
-Excellent communication and customer service skills
-
-Ability to work in a fast-paced environment
-
-Flexible with shifts
 Benefits:
 
-Competitive hourly wage
+Competitive salary
+Staff meals provided
+Health insurance
+Service charge incentives
+Training and career development programs
 
-Tips and bonuses
 
-Staff meals
-
-Health insurance options
-
-Training and career advancement
-
-4. Housekeeping Supervisor
-
+4. Room Attendant
 Department: Housekeeping
 Location: Luxor Grand Hotel, Downtown City
 Responsibilities:
 
-Supervise housekeeping staff
+Clean and service guest rooms and bathrooms to hotel standards
+Replenish room supplies and amenities
+Report maintenance issues or damage to supervisors
+Maintain cleanliness of hallways and public areas
+Handle guest requests and lost-and-found items properly
 
-Maintain cleanliness standards across guest rooms and public areas
-
-Schedule daily cleaning tasks
-
-Inspect rooms for quality assurance
-
-Report maintenance issues to management
 Qualifications:
 
-Previous housekeeping experience required
+Prior housekeeping experience preferred
+Physically fit and able to work on feet for extended hours
+Detail-oriented and reliable
+Ability to work flexible shifts including weekends
 
-Leadership and organizational skills
-
-Attention to detail
-
-Ability to work flexible hours
 Benefits:
 
 Competitive salary
-
-Staff accommodation options
-
+Staff meals provided
 Health insurance
+Uniform provided
+Training and career development programs
 
-Training programs
 
-5. Concierge
-
-Department: Front Office
+5. Maintenance Technician
+Department: Maintenance
 Location: Luxor Grand Hotel, Downtown City
 Responsibilities:
 
-Assist guests with inquiries and special requests
+Perform routine and preventive maintenance on hotel facilities
+Respond promptly to repair requests from all departments
+Maintain plumbing, electrical, HVAC, and mechanical systems
+Keep maintenance logs and report major issues to management
+Ensure compliance with safety and building regulations
 
-Provide information about local attractions and services
-
-Arrange transportation and reservations
-
-Ensure guest satisfaction and loyalty
 Qualifications:
 
-Excellent communication and interpersonal skills
+Vocational or technical course in electrical, mechanical, or plumbing
+At least 2 years experience in a similar role
+Ability to troubleshoot and resolve technical issues independently
+Willing to be on call for emergency repairs
 
-Previous concierge or customer service experience preferred
-
-Knowledge of local area
 Benefits:
 
 Competitive salary
-
-Staff meals
-
+Staff meals provided
 Health insurance
+Tools and uniform provided
+Training and career development programs
 
-Training programs
 
-6. Bartender
-
-Department: Food & Beverage / Bar
-Location: Luxor Grand Hotel, Downtown City
-Responsibilities:
-
-Prepare and serve beverages to guests
-
-Maintain cleanliness and organization of bar area
-
-Monitor inventory and order supplies
-
-Ensure compliance with alcohol regulations
-Qualifications:
-
-Previous bartending experience
-
-Knowledge of cocktails and beverages
-
-Good communication and customer service skills
-Benefits:
-
-Competitive hourly wage
-
-Tips
-
-Staff meals
-
-Health insurance options
-
-7. Event Coordinator
-
-Department: Banquet / Events
-Location: Luxor Grand Hotel, Downtown City
-Responsibilities:
-
-Plan and coordinate events and banquets
-
-Communicate with clients regarding event requirements
-
-Oversee setup and execution of events
-
-Coordinate with catering and housekeeping teams
-Qualifications:
-
-Previous event planning experience preferred
-
-Excellent organizational and communication skills
-
-Ability to multitask
-Benefits:
-
-Competitive salary
-
-Staff meals
-
-Health insurance
-
-Training programs
-
-8. Maintenance Technician
-
-Department: Engineering / Maintenance
-Location: Luxor Grand Hotel, Downtown City
-Responsibilities:
-
-Perform routine maintenance on hotel facilities and equipment
-
-Respond to urgent repair requests
-
-Maintain maintenance logs and reports
-
-Ensure compliance with safety regulations
-Qualifications:
-
-Technical or engineering background
-
-Previous maintenance experience
-
-Ability to troubleshoot and solve problems
-Benefits:
-
-Competitive salary
-
-Health insurance
-
-Training programs
-
-Accommodation options (if required)
-
-9. Spa Therapist
-
-Department: Spa & Wellness
-Location: Luxor Grand Hotel, Downtown City
-Responsibilities:
-
-Provide massages and wellness treatments to guests
-
-Maintain cleanliness of spa facilities
-
-Promote spa services to guests
-
-Ensure guest comfort and satisfaction
-Qualifications:
-
-Certified in massage therapy or wellness services
-
-Previous spa experience preferred
-
-Good communication and interpersonal skills
-Benefits:
-
-Competitive salary
-
-Tips
-
-Health insurance
-
-Training programs
-
-10. Sales & Marketing Executive
-
+6. Sales Executive
 Department: Sales & Marketing
 Location: Luxor Grand Hotel, Downtown City
 Responsibilities:
 
-Promote hotel services to potential clients
+Identify and pursue new business leads and corporate accounts
+Promote hotel packages, events, and services to clients
+Prepare proposals, presentations, and sales reports
+Build and maintain long-term client relationships
+Coordinate with operations teams to deliver on client commitments
 
-Develop marketing campaigns and sales strategies
-
-Build relationships with corporate and individual clients
-Monitor market trends and competitor activities
 Qualifications:
-Degree in marketing, business, or related field
-Previous sales experience preferred
-Strong communication and negotiation skills
+
+Degree in Business, Marketing, or a related field
+At least 2 years sales experience preferably in hospitality
+Excellent communication and negotiation skills
+Self-motivated with a proven track record of meeting targets
+
+Benefits:
+
+Competitive base salary plus commission
+Staff meals provided
+Health insurance
+Travel allowance
+Training and career development programs
+
+
+7. HR Officer
+Department: Human Resources
+Location: Luxor Grand Hotel, Downtown City
+Responsibilities:
+
+Manage end-to-end recruitment and onboarding processes
+Maintain employee records and HR documentation
+Coordinate training and development programs
+Handle employee relations, grievances, and disciplinary actions
+Ensure compliance with labor laws and hotel HR policies
+
+Qualifications:
+
+Degree in Human Resources, Psychology, or a related field
+At least 2 years HR experience preferably in hospitality
+Strong knowledge of labor laws and HR best practices
+Excellent organizational and communication skills
 
 Benefits:
 
 Competitive salary
-
-Commission or performance bonuses
-
-Staff meals
-
+Staff meals provided
 Health insurance
+HMO coverage
+Training and career development programs
 
-Professional development programs
+
+8. Accounting Officer
+Department: Accounting
+Location: Luxor Grand Hotel, Downtown City
+Responsibilities:
+
+Prepare and process payroll accurately and on time
+Record and reconcile daily financial transactions
+Assist in budget preparation and financial reporting
+Monitor accounts payable and receivable
+Ensure compliance with tax regulations and hotel financial policies
+
+Qualifications:
+
+Degree in Accounting, Finance, or a related field
+CPA license is an advantage
+At least 2 years accounting experience preferably in hospitality
+Proficient in accounting software and MS Excel
+High attention to detail and strong analytical skills
+
+Benefits:
+
+Competitive salary
+Staff meals provided
+Health insurance
+HMO coverage
+Training and career development programs
 ```
