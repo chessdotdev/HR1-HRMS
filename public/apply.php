@@ -18,10 +18,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $birthdate  = trim(filter_input(INPUT_POST, 'birthdate', FILTER_SANITIZE_SPECIAL_CHARS));
     $phone      = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_NUMBER_INT);
     $email      = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
-    $gender     = trim(filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_SPECIAL_CHARS));
+    $gender       = trim(filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_SPECIAL_CHARS));
+    $civil_status = trim(filter_input(INPUT_POST, 'civil_status', FILTER_SANITIZE_SPECIAL_CHARS));
+    $city         = trim(filter_input(INPUT_POST, 'city', FILTER_SANITIZE_SPECIAL_CHARS));
+    $province     = trim(filter_input(INPUT_POST, 'province', FILTER_SANITIZE_SPECIAL_CHARS));
+    $nationality  = trim(filter_input(INPUT_POST, 'nationality', FILTER_SANITIZE_SPECIAL_CHARS));
     $skills = $_POST['skills'] ?? '';
     $skills = trim($skills);
     $applicant_id = $_SESSION['applicant_id'];
+
+    // Resume upload
+    $resume_path = null;
+    if (!empty($_FILES['resume']['name'])) {
+        $file = $_FILES['resume'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
+        if ($mime !== 'application/pdf') {
+            $errors['resume'] = 'Only PDF files are allowed.';
+        } elseif ($file['size'] > 5 * 1024 * 1024) {
+            $errors['resume'] = 'Resume must be 5MB or less.';
+        } else {
+            $ext = 'pdf';
+            $filename = 'resume_' . $applicant_id . '_' . time() . '.' . $ext;
+            $dest = __DIR__ . '/uploads/resumes/' . $filename;
+            if (move_uploaded_file($file['tmp_name'], $dest)) {
+                $resume_path = $filename;
+            } else {
+                $errors['resume'] = 'Failed to upload resume.';
+            }
+        }
+    } else {
+        $errors['resume'] = 'Resume is required.';
+    }
 
     /* overwrite get method */
     $job_id = $_POST['job_id'] ?? $_GET['job_id'] ?? '';   
@@ -35,7 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$phone) { $errors['phone'] = "Phone is required"; }
     if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) { $errors['email'] = "Valid Email is required"; }
     if (!$gender) { $errors['gender'] = "Gender is required"; }
+    if (!$civil_status) { $errors['civil_status'] = "Civil status is required"; }
+    if (!$city) { $errors['city'] = "City is required"; }
+    if (!$province) { $errors['province'] = "Province is required"; }
+    if (!$nationality) { $errors['nationality'] = "Nationality is required"; }
     if (!$skills) { $errors['skills'] = "Skills are required"; }
+    if (!$resume_path && empty($errors['resume'])) { $errors['resume'] = 'Resume is required.'; }
     
     // Calculate age
     $age = null;
@@ -70,8 +104,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $age,
             $phone,
             $gender,
+            $civil_status,
+            $city,
+            $province,
+            $nationality,
             $email,
-            $skills
+            $skills,
+            $resume_path
         );
         if ($applyJob['success']) {
             $message = "<div class='alert alert-success'>{$applyJob['message']}</div>";
@@ -124,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <?=$message ?? '' ?>
 
-    <form action="apply.php" method="POST" id="applyForm" class="form-card p-4">
+    <form action="apply.php" method="POST" id="applyForm" class="form-card p-4" enctype="multipart/form-data">
         <!-- Personal Info -->
         <input type="hidden" name="job_id" value="<?=htmlspecialchars($job_id ?? '') ?>">
         <input type="hidden" name="title" value="<?=htmlspecialchars($job_title ?? '') ?>">
@@ -201,11 +240,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="row g-3 mt-1">
             <div class="col-sm-12">
-                        <label class="form-label" for="lastName">Email <span class="required text-danger">*</span></label>
-                        <input type="text" class="form-control <?=isset($errors['email']) ? 'is-invalid' : '';?>" name="email" placeholder="delacruz@gmail.com" />
-                        <div class="invalid-feedback">Email is required.</div>
-                    </div>
-                </div>
+                <label class="form-label">Email <span class="required text-danger">*</span></label>
+                <input type="text" class="form-control <?=isset($errors['email']) ? 'is-invalid' : '';?>" name="email" placeholder="delacruz@gmail.com" />
+                <div class="invalid-feedback">Email is required.</div>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-1">
+            <div class="col-sm-6">
+                <label class="form-label">Civil Status <span class="required text-danger">*</span></label>
+                <select class="form-select <?=isset($errors['civil_status']) ? 'is-invalid' : '';?>" name="civil_status">
+                    <option value="">Select</option>
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
+                </select>
+                <div class="invalid-feedback">Civil status is required.</div>
+            </div>
+            <div class="col-sm-6">
+                <label class="form-label">Nationality <span class="required text-danger">*</span></label>
+                <input type="text" class="form-control <?=isset($errors['nationality']) ? 'is-invalid' : '';?>" name="nationality" placeholder="Filipino" />
+                <div class="invalid-feedback">Nationality is required.</div>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-1">
+            <div class="col-sm-6">
+                <label class="form-label">City <span class="required text-danger">*</span></label>
+                <input type="text" class="form-control <?=isset($errors['city']) ? 'is-invalid' : '';?>" name="city" placeholder="Manila" />
+                <div class="invalid-feedback">City is required.</div>
+            </div>
+            <div class="col-sm-6">
+                <label class="form-label">Province <span class="required text-danger">*</span></label>
+                <input type="text" class="form-control <?=isset($errors['province']) ? 'is-invalid' : '';?>" name="province" placeholder="Metro Manila" />
+                <div class="invalid-feedback">Province is required.</div>
+            </div>
+        </div>
 
 
 
@@ -217,6 +286,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
         </div>
 
+
+        <div class="row g-3 mt-1">
+            <div class="col-sm-12">
+                <label class="form-label" for="resume">Resume (PDF only, max 5MB) <span class="required text-danger">*</span></label>
+                <input type="file" class="form-control <?=isset($errors['resume']) ? 'is-invalid' : '';?>" name="resume" id="resume" accept="application/pdf">
+                <div class="invalid-feedback"><?= $errors['resume'] ?? 'Resume is required.' ?></div>
+            </div>
+        </div>
 
         <div class="d-flex justify-content-between mt-4">
             <button type="submit" id="submit" class="apply-btn">

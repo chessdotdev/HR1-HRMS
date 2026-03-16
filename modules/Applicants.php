@@ -23,8 +23,13 @@ class Applicants {
         $age,
         $phone,
         $gender,
+        $civil_status,
+        $city,
+        $province,
+        $nationality,
         $email,
-        $skills
+        $skills,
+        $resume_path = null
     ){
         //check if applicant already submitted
         $checkQuery = "SELECT status FROM ". $this->table_name. " WHERE applicant_id = :applicant_id ORDER BY applied_at DESC LIMIT 1";
@@ -47,9 +52,9 @@ class Applicants {
         }
     
         $insertQuery = "INSERT INTO " . $this->table_name . " 
-            (applicant_id, job_id, job_title, firstname, lastname, middle_name, suffix, birthdate, age, phone, gender, email, skills)
+            (applicant_id, job_id, job_title, firstname, lastname, middle_name, suffix, birthdate, age, phone, gender, civil_status, city, province, nationality, email, skills, resume_path)
             VALUES 
-            (:applicant_id, :job_id, :job_title, :firstname, :lastname, :middle_name, :suffix, :birthdate, :age, :phone, :gender, :email, :skills)";
+            (:applicant_id, :job_id, :job_title, :firstname, :lastname, :middle_name, :suffix, :birthdate, :age, :phone, :gender, :civil_status, :city, :province, :nationality, :email, :skills, :resume_path)";
     
         $stmt = $this->conn->prepare($insertQuery);
     
@@ -64,8 +69,13 @@ class Applicants {
         $stmt->bindParam(':age', $age, PDO::PARAM_INT);
         $stmt->bindParam(':phone', $phone);
         $stmt->bindParam(':gender', $gender);
+        $stmt->bindParam(':civil_status', $civil_status);
+        $stmt->bindParam(':city', $city);
+        $stmt->bindParam(':province', $province);
+        $stmt->bindParam(':nationality', $nationality);
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':skills', $skills);
+        $stmt->bindParam(':resume_path', $resume_path);
     
         // Execute
         if($stmt->execute()){
@@ -86,13 +96,21 @@ class Applicants {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    //Get single applicant
+    //Get single applicant (Pending only — for view)
     public function getApplicant($id){
         $stmt = $this->conn->prepare("SELECT * FROM {$this->table_name} WHERE apply_id=:id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
-    }    
+    }
+
+    // Internal: get applicant regardless of status (for emails)
+    private function getApplicantById($id){
+        $stmt = $this->conn->prepare("SELECT * FROM {$this->table_name} WHERE apply_id=:id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
 public function updateStatus($id,$status){
         $stmt = $this->conn->prepare("UPDATE {$this->table_name} SET status=:status WHERE apply_id=:id");
@@ -109,8 +127,7 @@ public function updateStatus($id,$status){
     }
 
     private function sendRejectionNotification($applicant_id){
-        // Get applicant details
-        $applicant = $this->getApplicant($applicant_id);
+        $applicant = $this->getApplicantById($applicant_id);
         
         if($applicant && !empty($applicant['email'])){
             require_once '../MailService.php';
@@ -136,7 +153,7 @@ public function updateStatus($id,$status){
                     <div class='header'>
                         <h2>Application Update</h2>
                     </div>
-                    <div class='content'>
+                    <div class='content'>   
                         <p>Dear <strong>$name</strong>,</p>
                         <p>Thank you for your interest in joining our team at Hotel & Restaurant.</p>
                         <div class='message'>
@@ -206,8 +223,7 @@ public function updateStatus($id,$status){
     }
     
     private function sendInterviewNotification($applicant_id, $date, $time, $type){
-        // Get applicant details
-        $applicant = $this->getApplicant($applicant_id);
+        $applicant = $this->getApplicantById($applicant_id);
         
         if($applicant && !empty($applicant['email'])){
             require_once '../MailService.php';
@@ -288,10 +304,8 @@ public function updateStatus($id,$status){
         return $success; 
     }
     
-    // Create employee account and send hiring email with login credentials
     private function createEmployeeAccountWithEmail($applicant_id){
-        // Get applicant info
-        $app = $this->getApplicant($applicant_id);
+        $app = $this->getApplicantById($applicant_id);
         if(!$app) return;
 
         $year     = date('Y');

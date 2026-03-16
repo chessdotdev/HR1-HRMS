@@ -118,18 +118,18 @@ foreach ($employees as $emp) {
                         <tbody>
                             <?php foreach ($employees as $emp): ?>
                                 <tr>
-                                    <td><strong><?= htmlspecialchars($emp['employee_id']) ?></strong></td>
+                                    <td><strong><?= htmlspecialchars($emp['employee_id'] ?? '') ?></strong></td>
                                     <td>
                                         <div>
-                                            <strong><?= htmlspecialchars($emp['firstname'] . ' ' . $emp['lastname']) ?></strong>
+                                            <strong><?= htmlspecialchars(($emp['firstname'] ?? '') . ' ' . ($emp['lastname'] ?? '')) ?></strong>
                                             <br>
-                                            <small class="text-muted"><?= htmlspecialchars($emp['username']) ?></small>
+                                            <small class="text-muted"><?= htmlspecialchars($emp['username'] ?? '') ?></small>
                                         </div>
                                     </td>
                                     <td><?= htmlspecialchars($emp['job_title'] ?? 'N/A') ?></td>
-                                    <td><?= htmlspecialchars($emp['email']) ?></td>
-                                    <td><?= htmlspecialchars($emp['phone']) ?></td>
-                                    <td><?= date('M d, Y', strtotime($emp['hired_at'])) ?></td>
+                                    <td><?= htmlspecialchars($emp['email'] ?? '') ?></td>
+                                    <td><?= htmlspecialchars($emp['phone'] ?? '') ?></td>
+                                    <td><?= !empty($emp['hired_at']) ? date('M d, Y', strtotime($emp['hired_at'])) : '—' ?></td>
                                     <td>
                                         <span class="badge bg-success">Active</span>
                                     </td>

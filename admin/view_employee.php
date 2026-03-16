@@ -41,19 +41,19 @@ if (!$employee) {
                         </tr>
                         <tr>
                             <td class="text-muted">Username:</td>
-                            <td><?= htmlspecialchars($employee['username']) ?></td>
+                            <td><?= htmlspecialchars($employee['username'] ?? '') ?></td>
                         </tr>
                         <tr>
                             <td class="text-muted">Full Name:</td>
-                            <td><?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) ?></td>
+                            <td><?= htmlspecialchars(($employee['firstname'] ?? '') . ' ' . ($employee['lastname'] ?? '')) ?></td>
                         </tr>
                         <tr>
                             <td class="text-muted">Email:</td>
-                            <td><?= htmlspecialchars($employee['email']) ?></td>
+                            <td><?= htmlspecialchars($employee['email'] ?? '') ?></td>
                         </tr>
                         <tr>
                             <td class="text-muted">Phone:</td>
-                            <td><?= htmlspecialchars($employee['phone']) ?></td>
+                            <td><?= htmlspecialchars($employee['phone'] ?? '') ?></td>
                         </tr>
                         <tr>
                             <td class="text-muted">Job Title:</td>
@@ -63,13 +63,13 @@ if (!$employee) {
                             <td class="text-muted">Employment Status:</td>
                             <td>
                                 <span class="badge bg-<?= $employee['employment_status'] === 'Active' ? 'success' : 'warning' ?>">
-                                    <?= htmlspecialchars($employee['employment_status']) ?>
+                                    <?= htmlspecialchars($employee['employment_status'] ?? '') ?>
                                 </span>
                             </td>
                         </tr>
                         <tr>
                             <td class="text-muted">Hired Date:</td>
-                            <td><?= date('F d, Y', strtotime($employee['hired_at'])) ?></td>
+                            <td><?= !empty($employee['hired_at']) ? date('F d, Y', strtotime($employee['hired_at'])) : '—' ?></td>
                         </tr>
                     </table>
                 </div>
@@ -84,27 +84,27 @@ if (!$employee) {
                         <table class="table table-sm">
                             <tr>
                                 <td class="text-muted" style="width: 40%;">Emergency Contact:</td>
-                                <td><?= htmlspecialchars($onboarding['emergency_contact']) ?></td>
+                                <td><?= htmlspecialchars($onboarding['emergency_contact'] ?? '') ?></td>
                             </tr>
                             <tr>
                                 <td class="text-muted">Emergency Phone:</td>
-                                <td><?= htmlspecialchars($onboarding['emergency_phone']) ?></td>
+                                <td><?= htmlspecialchars($onboarding['emergency_phone'] ?? '') ?></td>
                             </tr>
                             <tr>
                                 <td class="text-muted">Relationship:</td>
-                                <td><?= htmlspecialchars($onboarding['emergency_relationship']) ?></td>
+                                <td><?= htmlspecialchars($onboarding['emergency_relationship'] ?? '') ?></td>
                             </tr>
                             <tr>
                                 <td class="text-muted">Address:</td>
-                                <td><?= htmlspecialchars($onboarding['address']) ?></td>
+                                <td><?= htmlspecialchars($onboarding['address'] ?? '') ?></td>
                             </tr>
                             <tr>
                                 <td class="text-muted">City:</td>
-                                <td><?= htmlspecialchars($onboarding['city']) ?></td>
+                                <td><?= htmlspecialchars($onboarding['city'] ?? '') ?></td>
                             </tr>
                             <tr>
                                 <td class="text-muted">Province:</td>
-                                <td><?= htmlspecialchars($onboarding['province']) ?></td>
+                                <td><?= htmlspecialchars($onboarding['province'] ?? '') ?></td>
                             </tr>
                         </table>
                     <?php else: ?>
@@ -122,19 +122,19 @@ if (!$employee) {
                         <table class="table table-sm">
                             <tr>
                                 <td class="text-muted" style="width: 40%;">TIN:</td>
-                                <td><?= htmlspecialchars($onboarding['tin_number']) ?></td>
+                                <td><?= htmlspecialchars($onboarding['tin_number'] ?? '') ?></td>
                             </tr>
                             <tr>
                                 <td class="text-muted">SSS:</td>
-                                <td><?= htmlspecialchars($onboarding['sss_number']) ?></td>
+                                <td><?= htmlspecialchars($onboarding['sss_number'] ?? '') ?></td>
                             </tr>
                             <tr>
                                 <td class="text-muted">Pag-IBIG:</td>
-                                <td><?= htmlspecialchars($onboarding['pagibig_number']) ?></td>
+                                <td><?= htmlspecialchars($onboarding['pagibig_number'] ?? '') ?></td>
                             </tr>
                             <tr>
                                 <td class="text-muted">PhilHealth:</td>
-                                <td><?= htmlspecialchars($onboarding['philhealth_number']) ?></td>
+                                <td><?= htmlspecialchars($onboarding['philhealth_number'] ?? '') ?></td>
                             </tr>
                         </table>
                     <?php else: ?>
@@ -152,11 +152,11 @@ if (!$employee) {
                         <table class="table table-sm">
                             <tr>
                                 <td class="text-muted" style="width: 40%;">Bank Name:</td>
-                                <td><?= htmlspecialchars($onboarding['bank_name']) ?></td>
+                                <td><?= htmlspecialchars($onboarding['bank_name'] ?? '') ?></td>
                             </tr>
                             <tr>
                                 <td class="text-muted">Account Number:</td>
-                                <td><?= htmlspecialchars($onboarding['bank_account_number']) ?></td>
+                                <td><?= htmlspecialchars($onboarding['bank_account_number'] ?? '') ?></td>
                             </tr>
                         </table>
                     <?php else: ?>

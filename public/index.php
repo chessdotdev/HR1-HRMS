@@ -89,7 +89,6 @@ body {
 }
 
 .section-title {
-    font-family: 'Lora', serif;
     font-size: 1.75rem;
     font-weight: 600;
     color: #1a1a1a;
@@ -131,7 +130,6 @@ body {
 }
 
 .job-title {
-    font-family: 'Lora', serif;
     font-size: 1.2rem;
     font-weight: 600;
     color: #1a1a1a;

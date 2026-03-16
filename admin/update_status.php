@@ -1,11 +1,14 @@
 <?php
 require_once '../modules/Applicants.php';
+
 $applicantObj = new Applicants();
 
-$id = $_POST['id'];
-$status = $_POST['status'];
+$id     = (int)($_POST['id'] ?? 0);
+$status = $_POST['status'] ?? '';
 
-$applicantObj->updateStatus($id,$status);
+if ($id && $status) {
+    $applicantObj->updateStatus($id, $status);
+}
 
-header("Location: view_applicant.php?id=".$id);
+header("Location: applicants.php");
 exit;
