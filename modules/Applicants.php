@@ -132,43 +132,29 @@ public function updateStatus($id,$status){
         if($applicant && !empty($applicant['email'])){
             require_once '../MailService.php';
             
-            $to = $applicant['email'];
-            $name = $applicant['firstname'] . ' ' . $applicant['lastname'];
-            $subject = 'Application Status Update - Hotel & Restaurant HR';
+            $to      = $applicant['email'];
+            $name    = $applicant['firstname'] . ' ' . $applicant['lastname'];
+            $company = MailService::getCompanyName();
+            $sig     = MailService::getSignature();
+            $subject = 'Application Status Update — ' . $company;
             
             $body = "
-            <html>
-            <head>
-                <style>
-                    body { font-family: Arial, sans-serif; line-height: 1.6; }
-                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                    .header { background-color: #dc3545; color: white; padding: 20px; text-align: center; }
-                    .content { padding: 20px; background-color: #f9f9f9; }
-                    .message { margin: 20px 0; padding: 15px; background-color: #fff; border-left: 4px solid #dc3545; }
-                    .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
-                </style>
-            </head>
-            <body>
-                <div class='container'>
-                    <div class='header'>
-                        <h2>Application Update</h2>
-                    </div>
-                    <div class='content'>   
+            <html><body style='font-family:Arial,sans-serif;line-height:1.6;'>
+                <div style='max-width:600px;margin:0 auto;padding:20px;'>
+                    <div style='background:#dc3545;color:white;padding:20px;text-align:center;'><h2>Application Update</h2></div>
+                    <div style='padding:20px;background:#f9f9f9;'>
                         <p>Dear <strong>$name</strong>,</p>
-                        <p>Thank you for your interest in joining our team at Hotel & Restaurant.</p>
-                        <div class='message'>
+                        <p>Thank you for your interest in joining our team at <strong>$company</strong>.</p>
+                        <div style='margin:20px 0;padding:15px;background:#fff;border-left:4px solid #dc3545;'>
                             <p><strong>After careful consideration, we regret to inform you that we have decided to move forward with other candidates for this position.</strong></p>
                         </div>
                         <p>We encourage you to apply for future openings that match your skills and experience.</p>
                         <p>We wish you the best in your career journey.</p>
-                        <p>Best regards,<br>Human Resource Department<br>Hotel & Restaurant</p>
+                        $sig
                     </div>
-                    <div class='footer'>
-                        <p>This is an automated email. Please do not reply to this message.</p>
-                    </div>
+                    <div style='text-align:center;padding:20px;color:#666;font-size:12px;'><p>This is an automated email. Please do not reply.</p></div>
                 </div>
-            </body>
-            </html>
+            </body></html>
             ";
             
             MailService::send($to, $subject, $body, true);
@@ -223,50 +209,41 @@ public function updateStatus($id,$status){
     }
     
     private function sendInterviewNotification($applicant_id, $date, $time, $type){
+        $time = date('h:i A', strtotime($time));
+        $date = date('F d, Y', strtotime($date));
         $applicant = $this->getApplicantById($applicant_id);
         
         if($applicant && !empty($applicant['email'])){
             require_once '../MailService.php';
             
-            $to = $applicant['email'];
-            $name = $applicant['firstname'] . ' ' . $applicant['lastname'];
-            $subject = 'Interview Schedule Notification - Hotel & Restaurant HR';
+            $to      = $applicant['email'];
+            $name    = $applicant['firstname'] . ' ' . $applicant['lastname'];
+            $company = MailService::getCompanyName();
+            $address = MailService::getCompanyAddress();
+            $sig     = MailService::getSignature();
+            $subject = 'Interview Schedule Notification - ' . $company;
+            
+            $locationLine = $address ? "<p><strong>Location:</strong> {$address}</p>" : '';
             
             $body = "
-            <html>
-            <head>
-                <style>
-                    body { font-family: Arial, sans-serif; line-height: 1.6; }
-                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                    .header { background-color: #4a90e2; color: white; padding: 20px; text-align: center; }
-                    .content { padding: 20px; background-color: #f9f9f9; }
-                    .details { margin: 20px 0; padding: 15px; background-color: #fff; border-left: 4px solid #4a90e2; }
-                    .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
-                </style>
-            </head>
-            <body>
-                <div class='container'>
-                    <div class='header'>
-                        <h2>Interview Scheduled</h2>
-                    </div>
-                    <div class='content'>
+            <html><body style='font-family:Arial,sans-serif;line-height:1.6;'>
+                <div style='max-width:600px;margin:0 auto;padding:20px;'>
+                    <div style='background:#4a90e2;color:white;padding:20px;text-align:center;'><h2>Interview Scheduled</h2></div>
+                    <div style='padding:20px;background:#f9f9f9;'>
                         <p>Dear <strong>$name</strong>,</p>
-                        <p>We are pleased to inform you that your interview has been scheduled. Please find the details below:</p>
-                        <div class='details'>
+                        <p>We are pleased to inform you that your interview at <strong>$company</strong> has been scheduled.</p>
+                        <div style='margin:20px 0;padding:15px;background:#fff;border-left:4px solid #4a90e2;'>
                             <p><strong>Date:</strong> $date</p>
                             <p><strong>Time:</strong> $time</p>
                             <p><strong>Interview Type:</strong> $type</p>
+                            $locationLine
                         </div>
                         <p>Please arrive 15 minutes before the scheduled time and bring all required documents.</p>
-                        <p>If you have any questions or need to reschedule, please contact us.</p>
-                        <p>Best regards,<br>Human Resource Department<br>Hotel & Restaurant</p>
+                        $sig
                     </div>
-                    <div class='footer'>
-                        <p>This is an automated email. Please do not reply to this message.</p>
-                    </div>
+                    <div style='text-align:center;padding:20px;color:#666;font-size:12px;'><p>This is an automated email. Please do not reply.</p></div>
                 </div>
-            </body>
-            </html>
+            </body></html>
             ";
             
             MailService::send($to, $subject, $body, true);
@@ -337,48 +314,35 @@ public function updateStatus($id,$status){
         if($email && !empty($email)){
             require_once '../MailService.php';
             
-            $to = $email;
-            $subject = 'Congratulations! You Have Been Hired - Hotel & Restaurant HR';
+            $company = MailService::getCompanyName();
+            $address = MailService::getCompanyAddress();
+            $sig     = MailService::getSignature();
+            $subject = 'Congratulations! You Have Been Hired - ' . $company;
+            
+            $locationLine = $address ? "<p><strong>Report to:</strong> {$address}</p>" : '';
             
             $body = "
-            <html>
-            <head>
-                <style>
-                    body { font-family: Arial, sans-serif; line-height: 1.6; }
-                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                    .header { background-color: #28a745; color: white; padding: 20px; text-align: center; }
-                    .content { padding: 20px; background-color: #f9f9f9; }
-                    .credentials { margin: 20px 0; padding: 15px; background-color: #fff; border-left: 4px solid #28a745; }
-                    .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
-                </style>
-            </head>
-            <body>
-                <div class='container'>
-                    <div class='header'>
-                        <h2>Welcome to Hotel & Restaurant!</h2>
-                    </div>
-                    <div class='content'>
+            <html><body style='font-family:Arial,sans-serif;line-height:1.6;'>
+                <div style='max-width:600px;margin:0 auto;padding:20px;'>
+                    <div style='background:#28a745;color:white;padding:20px;text-align:center;'><h2>Welcome to $company!</h2></div>
+                    <div style='padding:20px;background:#f9f9f9;'>
                         <p>Dear <strong>$name</strong>,</p>
-                        <p>We are delighted to inform you that you have been <strong>HIRED</strong>!</p>
-                        <div class='credentials'>
+                        <p>Congratulations! You have successfully joined <strong>$company</strong>.</p>
+                        <div style='margin:20px 0;padding:15px;background:#fff;border-left:4px solid #28a745;'>
                             <p><strong>Your Employee Portal Account:</strong></p>
-                            <p>Email: <strong>$username</strong></p>
+                            <p>Username: <strong>$username</strong></p>
                             <p>Temporary Password: <strong>$password</strong></p>
+                            $locationLine
                         </div>
                         <p>Please log in to the employee portal to complete your onboarding tasks and review important documents.</p>
-                        <p>We will be sending you more details about your onboarding process and first day soon.</p>
-                        <p>We are excited to have you join our team!</p>
-                        <p>Best regards,<br>Human Resource Department<br>Hotel & Restaurant</p>
+                        $sig
                     </div>
-                    <div class='footer'>
-                        <p>This is an automated email. Please do not reply to this message.</p>
-                    </div>
+                    <div style='text-align:center;padding:20px;color:#666;font-size:12px;'><p>This is an automated email. Please do not reply.</p></div>
                 </div>
-            </body>
-            </html>
+            </body></html>
             ";
             
-            MailService::send($to, $subject, $body, true);
+            MailService::send($email, $subject, $body, true);
         }
     }
     

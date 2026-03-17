@@ -1,5 +1,5 @@
 <?php
-require('../config/database.php');
+require_once '../config/Database.php';
 
 class Admin{
     private $conn;

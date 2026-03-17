@@ -76,9 +76,41 @@ if (!$employee) {
             </div>
         </div>
 
+  
+
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">Personal Information</div>
+                <div class="card-header">Government IDs</div>
+                <div class="card-body">
+                    <?php if ($onboarding && $onboarding['personal_info_completed']): ?>
+                        <table class="table table-sm">
+                            <tr>
+                                <td class="text-muted" style="width: 40%;">TIN:</td>
+                                <td><?= htmlspecialchars($onboarding['tin_number'] ?? '') ?></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">SSS:</td>
+                                <td><?= htmlspecialchars($onboarding['sss_number'] ?? '') ?></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Pag-IBIG:</td>
+                                <td><?= htmlspecialchars($onboarding['pagibig_number'] ?? '') ?></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">PhilHealth:</td>
+                                <td><?= htmlspecialchars($onboarding['philhealth_number'] ?? '') ?></td>
+                            </tr>
+                        </table>
+                    <?php else: ?>
+                        <p class="text-muted text-center py-3">Government IDs not available</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Other Information</div>
                 <div class="card-body">
                     <?php if ($onboarding && $onboarding['personal_info_completed']): ?>
                         <table class="table table-sm">
@@ -109,36 +141,6 @@ if (!$employee) {
                         </table>
                     <?php else: ?>
                         <p class="text-muted text-center py-3">Personal information not available</p>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">Government IDs</div>
-                <div class="card-body">
-                    <?php if ($onboarding && $onboarding['personal_info_completed']): ?>
-                        <table class="table table-sm">
-                            <tr>
-                                <td class="text-muted" style="width: 40%;">TIN:</td>
-                                <td><?= htmlspecialchars($onboarding['tin_number'] ?? '') ?></td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">SSS:</td>
-                                <td><?= htmlspecialchars($onboarding['sss_number'] ?? '') ?></td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">Pag-IBIG:</td>
-                                <td><?= htmlspecialchars($onboarding['pagibig_number'] ?? '') ?></td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">PhilHealth:</td>
-                                <td><?= htmlspecialchars($onboarding['philhealth_number'] ?? '') ?></td>
-                            </tr>
-                        </table>
-                    <?php else: ?>
-                        <p class="text-muted text-center py-3">Government IDs not available</p>
                     <?php endif; ?>
                 </div>
             </div>

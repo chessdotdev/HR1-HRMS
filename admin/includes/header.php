@@ -1,9 +1,10 @@
 <?php
-session_start();
-include './includes/verify_admin.php';
-
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!isset($_SESSION['admin_id'])) { include './includes/verify_admin.php'; }
+if (!class_exists('RBAC')) require_once '../modules/RBAC.php';
+$_role = $_SESSION['admin_role'] ?? 'recruiter';
 ?>
-
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +27,7 @@ include './includes/verify_admin.php';
         <!-- Sidebar Header -->
         <div class="d-flex align-items-center mb-3" style="position: relative;">
            <div class="sidebar-logo">
-                <a href="dashboard.php">Admin</a>
+                <a href="dashboard.php">TechnoVista</a>
             </div>
             <button class="toggle-btn btn btn-light me-2" type="button">
                 <i class="bi bi-list" id="toggle-icon"></i>
@@ -72,6 +73,7 @@ include './includes/verify_admin.php';
             </li>
 
             <!-- Employees Dropdown -->
+            <?php if (RBAC::canAccess($_role, 'employee_list')): ?>
             <li class="sidebar-item">
                 <a href="#employeesMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
                     <i class="bi bi-person-badge"></i>
@@ -82,8 +84,10 @@ include './includes/verify_admin.php';
                     <li class="sidebar-item"><a href="departments.php" class="sidebar-link">Departments</a></li>
                 </ul>
             </li>
+            <?php endif; ?>
 
             <!-- Performance Dropdown -->
+            <?php if (RBAC::canAccess($_role, 'evaluation_forms')): ?>
             <li class="sidebar-item">
                 <a href="#performanceMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
                     <i class="bi bi-graph-up"></i>
@@ -94,8 +98,10 @@ include './includes/verify_admin.php';
                     <li class="sidebar-item"><a href="evaluation_results.php" class="sidebar-link">Evaluation Results</a></li>
                 </ul>
             </li>
+            <?php endif; ?>
 
             <!-- Recognition Dropdown -->
+            <?php if (RBAC::canAccess($_role, 'points_rewards')): ?>
             <li class="sidebar-item">
                 <a href="#recognitionMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
                     <i class="bi bi-trophy"></i>
@@ -106,27 +112,17 @@ include './includes/verify_admin.php';
                     <li class="sidebar-item"><a href="leaderboard.php" class="sidebar-link">Leaderboard</a></li>
                 </ul>
             </li>
+            <?php endif; ?>
 
-            <!-- RBAC Module -->
+            <?php if (RBAC::canAccess($_role, 'roles')): ?>
+            <!-- Roles & Access -->
             <li class="sidebar-item">
-                <a href="#rbacMenu" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" aria-expanded="false">
+                <a href="roles.php" class="sidebar-link">
                     <i class="bi bi-shield-lock"></i>
-                    <span>RBAC</span>
-                </a>
-                <ul id="rbacMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
-                    <li class="sidebar-item"><a href="roles.php" class="sidebar-link">Roles</a></li>
-                    <li class="sidebar-item"><a href="permissions.php" class="sidebar-link">Permissions</a></li>
-                    <li class="sidebar-item"><a href="user_roles.php" class="sidebar-link">User Roles</a></li>
-                </ul>
-            </li>
-
-            <!-- Notifications -->
-            <li class="sidebar-item">
-                <a href="notifications.php" class="sidebar-link">
-                    <i class="bi bi-bell"></i>
-                    <span>Notifications</span>
+                    <span>Roles & Access</span>
                 </a>
             </li>
+            <?php endif; ?>
 
             <!-- Settings -->
             <li class="sidebar-item">
@@ -136,7 +132,12 @@ include './includes/verify_admin.php';
                 </a>
                 <ul id="settingsMenu" class="collapse list-unstyled" data-bs-parent="#sidebar">
                     <li class="sidebar-item"><a href="account_settings.php" class="sidebar-link">Account Settings</a></li>
+                    <?php if (RBAC::canAccess($_role, 'system_settings')): ?>
                     <li class="sidebar-item"><a href="system_settings.php" class="sidebar-link">System Settings</a></li>
+                    <?php endif; ?>
+                    <?php if (RBAC::canAccess($_role, 'audit_logs')): ?>
+                    <li class="sidebar-item"><a href="audit_logs.php" class="sidebar-link">Audit Logs</a></li>
+                    <?php endif; ?>
                 </ul>
             </li>
 
@@ -144,6 +145,13 @@ include './includes/verify_admin.php';
 
         <!-- Sidebar Footer -->
         <div class="sidebar-footer mt-auto">
+            <div class="px-2 pb-2" style="font-size:0.72rem;color:#a1a1aa;">
+                <i class="bi bi-person-circle me-1"></i>
+                <?= htmlspecialchars($_SESSION['admin_username'] ?? '') ?>
+                <span class="badge bg-<?= RBAC::getRoleBadgeColor($_role) ?> ms-1" style="font-size:0.65rem;">
+                    <?= RBAC::getRoleLabel($_role) ?>
+                </span>
+            </div>
             <a href="../logout.php" class="sidebar-link">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Logout</span>

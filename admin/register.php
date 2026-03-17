@@ -1,7 +1,8 @@
 <?php
-require_once '../auth/Admin.php';
-
-$applicants_account = new Admin();
+session_start();
+header("Location: login.php");
+exit();
+?>
 $messageErr = '';
 $success = false;
 

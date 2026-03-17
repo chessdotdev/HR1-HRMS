@@ -1,7 +1,13 @@
 <?php
+session_start();
 require_once '../modules/Employee.php';
+require_once '../modules/AuditLog.php';
+require_once 'includes/verify_admin.php';
 
 $employeeObj = new Employee();
+$audit = new AuditLog();
+$admin_id   = $_SESSION['admin_id'];
+$admin_name = $_SESSION['admin_username'];
 $employee_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $message = '';
 $messageType = '';
@@ -30,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $employee_id) {
         $stmt->bindParam(':employee_id', $employee_id);
         
         if ($stmt->execute()) {
+            $audit->log($admin_id, $admin_name, 'Schedule Orientation', 'Onboarding', "Scheduled orientation dates for employee ID {$employee_id}");
             $message = 'Orientation dates scheduled successfully!';
             $messageType = 'success';
         } else {
@@ -43,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $employee_id) {
         
         if (in_array($day, ['1', '2', '3']) && in_array($status, ['Pending', 'Completed', 'Missed'])) {
             $employeeObj->updateOrientationStatus($employee_id, $day, $status);
+            $audit->log($admin_id, $admin_name, 'Update Orientation Status', 'Onboarding', "Employee ID {$employee_id} Day {$day} set to {$status}");
             $message = "Day $day status updated to $status";
             $messageType = 'success';
         }

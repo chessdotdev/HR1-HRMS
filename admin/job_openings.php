@@ -1,10 +1,16 @@
 <?php
+session_start();
 require_once '../modules/Recruitment.php';
+require_once '../modules/AuditLog.php';
 require_once '../config/Database.php';
+require_once 'includes/verify_admin.php';
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
 $recruitment = new Recruitment();
+$audit = new AuditLog();
+$admin_id   = $_SESSION['admin_id'];
+$admin_name = $_SESSION['admin_username'];
 $message = "";
 
 // Fetch active departments
@@ -45,7 +51,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $message = "All fields are required.";  
         } else {
             $result = $recruitment->createJob($title, $department, $responsibilities, $qualifications, $benefits, $location);
-            $message = $result ? "Job posted successfully!" : "Failed to create job.";
+            if ($result) {
+                $audit->log($admin_id, $admin_name, 'Create Job', 'Recruitment', "Posted job: {$title} ({$department})");
+                $message = "Job posted successfully!";
+            } else {
+                $message = "Failed to create job.";
+            }
         }
     }
 
@@ -56,6 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if ($job_id && $new_status) {
             $recruitment->updateJobsStatus($job_id, $new_status);
+            $audit->log($admin_id, $admin_name, 'Update Job Status', 'Recruitment', "Job ID {$job_id} set to {$new_status}");
             header("Location: job_openings.php");
             exit();
         }

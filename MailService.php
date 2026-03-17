@@ -19,6 +19,28 @@ $dotenv->load();
 //Create an instance; passing `true` enables exceptions
 class MailService {
 
+    private static function getSettings(): array {
+        require_once __DIR__ . '/config/Database.php';
+        $conn = (new Database())->connect();
+        return $conn->query("SELECT `key`, `value` FROM system_settings")->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+    public static function getCompanyName(): string {
+        $s = self::getSettings();
+        return $s['company_name'] ?? $_ENV['SMTP_FROM_NAME'] ?? 'HR Team';
+    }
+
+    public static function getCompanyAddress(): string {
+        $s = self::getSettings();
+        return $s['company_address'] ?? '';
+    }
+
+    public static function getSignature(): string {
+        $s = self::getSettings();
+        $sig = $s['email_signature'] ?? '';
+        return $sig ? '<br><br>' . nl2br(htmlspecialchars($sig)) : '';
+    }
+
     public static function send($to, $subject, $body, $silent = false){
 
     $mail = new PHPMailer(true);

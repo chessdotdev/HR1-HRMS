@@ -1,7 +1,14 @@
 <?php
+session_start();
 require_once '../config/Database.php';
+require_once '../modules/AuditLog.php';
+require_once 'includes/verify_admin.php';
+
 $db = new Database();
 $conn = $db->connect();
+$audit = new AuditLog();
+$admin_id   = $_SESSION['admin_id'];
+$admin_name = $_SESSION['admin_username'];
 
 $message = '';
 $messageType = '';
@@ -21,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bindParam(':description', $description);
             
             if ($stmt->execute()) {
+                $audit->log($admin_id, $admin_name, 'Create Department', 'Departments', "Created department: {$name}");
                 $message = 'Department created successfully!';
                 $messageType = 'success';
             } else {
@@ -42,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':id', $id);
         
         if ($stmt->execute()) {
+            $audit->log($admin_id, $admin_name, 'Update Department', 'Departments', "Updated department ID {$id}: {$name} ({$status})");
             $message = 'Department updated successfully!';
             $messageType = 'success';
         } else {
@@ -50,12 +59,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($action === 'delete') {
         $id = (int)$_POST['id'];
+        $deptRow = $conn->prepare("SELECT name FROM departments WHERE id=:id");
+        $deptRow->execute([':id' => $id]);
+        $deptName = $deptRow->fetchColumn() ?: "ID {$id}";
         
         $query = "DELETE FROM departments WHERE id = :id";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':id', $id);
         
         if ($stmt->execute()) {
+            $audit->log($admin_id, $admin_name, 'Delete Department', 'Departments', "Deleted department: {$deptName}");
             $message = 'Department deleted successfully!';
             $messageType = 'success';
         } else {

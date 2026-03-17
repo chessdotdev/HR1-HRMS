@@ -376,6 +376,34 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <span>Dashboard</span>
                     </a>
                 </li>
+
+                <li><div class="sidebar-section-label">My Work</div></li>
+
+                <li class="sidebar-item">
+                    <a href="my_performance.php" class="sidebar-link <?= $current_page === 'my_performance.php' ? 'active' : '' ?>">
+                        <i class="bi bi-graph-up"></i>
+                        <span>Performance</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a href="recognition.php" class="sidebar-link <?= in_array($current_page, ['recognition.php','recognition_history.php']) ? 'active' : '' ?>">
+                        <i class="bi bi-trophy"></i>
+                        <span>Recognition</span>
+                    </a>
+                </li>
+                <li class="sidebar-item" style="padding-left:0.75rem;">
+                    <a href="recognition.php" class="sidebar-link <?= $current_page === 'recognition.php' ? 'active' : '' ?>" style="font-size:0.82rem;padding:0.4rem 0.75rem;">
+                        <i class="bi bi-grid-3x3-gap" style="font-size:0.85rem;"></i>
+                        <span>All Recognitions</span>
+                    </a>
+                </li>
+                <li class="sidebar-item" style="padding-left:0.75rem;">
+                    <a href="recognition_history.php" class="sidebar-link <?= $current_page === 'recognition_history.php' ? 'active' : '' ?>" style="font-size:0.82rem;padding:0.4rem 0.75rem;">
+                        <i class="bi bi-clock-history" style="font-size:0.85rem;"></i>
+                        <span>My History</span>
+                    </a>
+                </li>
             <?php endif; ?>
 
             <li><div class="sidebar-section-label">Account</div></li>
@@ -384,6 +412,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <a href="profile.php" class="sidebar-link <?= $current_page === 'profile.php' ? 'active' : '' ?>">
                     <i class="bi bi-person"></i>
                     <span>Profile</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item">
+                <a href="settings.php" class="sidebar-link <?= $current_page === 'settings.php' ? 'active' : '' ?>">
+                    <i class="bi bi-gear"></i>
+                    <span>Settings</span>
                 </a>
             </li>
 

@@ -123,7 +123,7 @@ $recentJobs = array_slice($allJobsStmt->fetchAll(PDO::FETCH_ASSOC), 0, 3);
                                 </div>
                             <?php endforeach; ?>
                         </div>
-                        <a href="applicants.php" class="btn btn-sm btn-outline-primary mt-3 w-100">View All Applicants</a>
+                        <a href="applicants.php" class="btn btn-sm btn-outline-dark fw-bold mt-3 w-100">View All Applicants</a>
                     <?php else: ?>
                         <p class="text-muted text-center py-3">No recent applicants</p>
                     <?php endif; ?>
@@ -151,7 +151,7 @@ $recentJobs = array_slice($allJobsStmt->fetchAll(PDO::FETCH_ASSOC), 0, 3);
                                 </div>
                             <?php endforeach; ?>
                         </div>
-                        <a href="job_openings.php" class="btn btn-sm btn-outline-primary mt-3 w-100">View All Jobs</a>
+                        <a href="job_openings.php" class="btn btn-sm btn-outline-dark fw-bold mt-3 w-100">View All Jobs</a>
                     <?php else: ?>
                         <p class="text-muted text-center py-3">No job postings yet</p>
                     <?php endif; ?>
@@ -169,22 +169,22 @@ $recentJobs = array_slice($allJobsStmt->fetchAll(PDO::FETCH_ASSOC), 0, 3);
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-3">
-                            <a href="job_openings.php" class="btn btn-outline-primary w-100">
+                            <a href="job_openings.php" class="btn btn-sm btn-outline-dark fw-bold w-100">
                                 <i class="bi bi-plus-circle"></i> Post New Job
                             </a>
                         </div>
                         <div class="col-md-3">
-                            <a href="applicants.php" class="btn btn-outline-warning w-100">
+                            <a href="applicants.php" class="btn btn-sm btn-outline-dark fw-bold w-100">
                                 <i class="bi bi-eye"></i> Review Applicants
                             </a>
                         </div>
                         <div class="col-md-3">
-                            <a href="interviews.php" class="btn btn-outline-info w-100">
+                            <a href="interviews.php" class="btn btn-sm btn-outline-dark fw-bold w-100">
                                 <i class="bi bi-calendar-plus"></i> Schedule Interview
                             </a>
                         </div>
                         <div class="col-md-3">
-                            <a href="employee_list.php" class="btn btn-outline-success w-100">
+                            <a href="employee_list.php" class="btn btn-sm btn-outline-dark fw-bold w-100">
                                 <i class="bi bi-people"></i> Manage Employees
                             </a>
                         </div>

@@ -1,6 +1,9 @@
 <?php
+session_start();
 require_once '../modules/Applicants.php';
+require_once '../modules/AuditLog.php';
 $applicantObj = new Applicants();
+$audit = new AuditLog();
 
 if($_SERVER['REQUEST_METHOD']=='POST'){
     $interview_id = $_POST['interview_id'];
@@ -14,6 +17,9 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     $success = $applicantObj->updateInterviewResult($interview_id, $result);
 
     if($success){
+        if (isset($_SESSION['admin_id'])) {
+            $audit->log($_SESSION['admin_id'], $_SESSION['admin_username'], 'Interview Result', 'Recruitment', "Interview ID {$interview_id} marked as {$result}");
+        }
         header("Location: interviews.php"); 
         exit;
     } else {

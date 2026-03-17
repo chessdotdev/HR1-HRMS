@@ -1,433 +1,261 @@
-## FILE STRUCTURE
+# Hotel & Restaurant HR System (HR1)
+> A web-based Human Resource Management System for hotel and restaurant operations — built with PHP, MySQL, and Bootstrap 5.
+
+---
+
+## Table of Contents
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [File Structure](#file-structure)
+- [System Flow](#system-flow)
+- [Functions & Features](#functions--features)
+- [Data Transfer Protocol](#data-transfer-protocol)
+- [Security](#security)
+- [Admin Roles](#admin-roles)
+- [Installation](#installation)
+
+---
+
+## Overview
+
+HR1 is a full-featured HR system designed for Luxor Grand Hotel. It covers the complete employee lifecycle — from job posting and applicant tracking, to onboarding, performance evaluation, and social recognition.
+
+It has two portals:
+- **Admin Portal** — for HR staff to manage recruitment, employees, performance, and recognition
+- **Employee Portal** — for active employees to view their onboarding, performance review, and recognitions
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Backend | PHP 8 (procedural + OOP) |
+| Database | MySQL (via PDO) |
+| Frontend | Bootstrap 5, Bootstrap Icons, Geist Font |
+| Email | PHPMailer + SMTP |
+| Environment | phpdotenv (.env) |
+| Server | Apache (XAMPP) |
+
+---
+
+## File Structure
+
 ```
-HR1_Human_Resource_System/
+Hotel_and_Restaurant_HR1/
 │
-├── admin/                       <-- Admin dashboard / HR side
-│   ├── applicants/
-│   │   └── index.php            <-- Admin applicant management (your code)
-│   └── employees/
-│       └── index.php
+├── admin/                        ← Admin portal pages
+│   ├── includes/
+│   │   ├── header.php            ← Session, RBAC check, sidebar
+│   │   ├── footer.php
+│   │   └── verify_admin.php      ← Auth + role access guard
+│   ├── dashboard.php
+│   ├── job_openings.php
+│   ├── applicants.php
+│   ├── interviews.php
+│   ├── applicant_status.php
+│   ├── hiring_status.php
+│   ├── new_hires.php
+│   ├── onboarding_tasks.php
+│   ├── orientation_schedule.php
+│   ├── employee_list.php
+│   ├── departments.php
+│   ├── evaluation_forms.php
+│   ├── evaluation_results.php
+│   ├── points_rewards.php
+│   ├── leaderboard.php
+│   ├── roles.php                 ← RBAC management (Super Admin only)
+│   ├── account_settings.php
+│   ├── system_settings.php       ← Super Admin only
+│   ├── audit_logs.php            ← Super Admin only
+│   └── login.php
+│
+├── employee/                     ← Employee portal pages
+│   ├── includes/
+│   │   ├── header.php
+│   │   └── footer.php
+│   ├── dashboard.php
+│   ├── onboarding.php
+│   ├── personal_info.php
+│   ├── documents.php
+│   ├── orientation.php
+│   ├── my_performance.php
+│   ├── recognition.php
+│   ├── recognition_history.php
+│   ├── profile.php
+│   ├── toggle_reaction.php       ← AJAX endpoint
+│   └── login.php
+│
+├── modules/                      ← Business logic classes
+│   ├── Applicants.php
+│   ├── Employee.php
+│   ├── Recruitment.php
+│   ├── Performance.php
+│   ├── Recognition.php
+│   ├── RBAC.php
+│   └── AuditLog.php
+│
+├── auth/
+│   ├── Admin.php                 ← Admin login/register
+│   ├── User.php
+│   └── Applicants_account.php
 │
 ├── config/
-│   ├── database.php              <-- PDO connection
-│   └── config.php                <-- app settings
+│   └── Database.php              ← PDO connection
 │
+├── backup/                       ← SQL schema files
+│   ├── performance_recognition_schema.sql
+│   ├── employee_onboarding_schema.sql
+│   ├── departments_schema.sql
+│   ├── rbac_schema.sql
+│   └── settings_audit_schema.sql
 │
-├── Auth/
-│   └── User.php                  <-- Auth / user class
+├── public/                       ← Applicant-facing pages
+│   ├── index.php                 ← Job listings
+│   ├── apply.php                 ← Application form
+│   └── uploads/resumes/
 │
-│
-├── modules/
-│   ├── Applicants.php            <-- Applicant class
-│   ├── Employee.php              <-- Employee class
-│                  
-│
-├── public/                       <-- Frontend / user UI
-│   ├── index.php                 <-- Job listings page
-│   ├── apply.php                 <-- Applicant fill-up form
-│   ├── assets/
-│   │   ├── css/
-│   │   ├── js/
-│   │   └── images/
-│   └── uploads/
-│       └── resumes/
-│
-├── includes/
-│   ├── header.php
-│   └── footer.php
-│
-└── .htaccess
+├── MailService.php               ← Email sender wrapper
+├── .env                          ← SMTP credentials (not committed)
+├── .htaccess
+└── README.md
 ```
-### .htaccess
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
 
-### Job & Employee Flow
-```
-job_posts
-   ↓
-applicant_accounts
-   ↓
-applicants → applicant_documents → application_status
-   ↓ (Hired)
-employees → accounts → employee_job_info
-   ↓
-employee_onboarding → onboarding_documents → orientation_schedule
-   ↓
-employee_status = Active
-```
 ---
 
-## Sidebar Components
-```
-Dashboard
-
-Recruitment
-    Job Postings
-    Applicants
-    Interviews
-    Hiring Status
-
-Onboarding
-    New Hires
-    Tasks
-    Orientation Schedule
-
-Employees
-    Employee List
-    Departments
-    Roles & Access
-
-Performance
-    Evaluation Forms
-    Evaluation Results
-
-Recognition
-    Points & Rewards
-    Leaderboard
-
-Notifications
-
-Settings
-    Account Settings
-    System Settings
-
-Logout
+## System Flow
 
 ```
----
-
-# modules/.htaccess
-Deny from all
-
-# config/.htaccess
-Deny from all
-
-
-# Hotel & Restaurant Human Resource (HR1) System
-
-## Goal
-Allow HR users to post jobs, track applicants, and manage talent efficiently.  
-
----
-
-## 1. Dashboard (Landing Page)
-
----
-
-## Job Posting
-- Create new job (role, department: Kitchen, Front Desk, Housekeeping; location; shift)
+Job Postings
+     ↓
+Applicants apply (public portal)
+     ↓
+HR reviews → Schedule Interview → Send email notification
+     ↓
+Interview Result: Passed
+     ↓
+Auto-create Employee Account → Send credentials via email
+     ↓
+Employee Portal: Onboarding (Personal Info → Documents → Orientation)
+     ↓
+Employment Status: Active
+     ↓
+Performance Review (Probation) → Goals → Feedback → Ratings → Finalize
+     ↓
+Social Recognition → Leaderboard
+```
 
 ---
 
-## Applicant Management
-- View all applicants per job posting  
-- Filter by status: Pending → Interview → Hired/Rejected  
-- Candidate profile: Personal info, resume  
-- Schedule Interview, Send Email, Update Status  
-- Schedule interviews  
-- **Automatic account creation:**  
-  - If a candidate is **hired**, the system automatically creates an employee account and sends credentials via email  
-  - Rejected candidates remain in the system for tracking, but no account is created
+## Functions & Features
 
----
-
-## 2. New Hire Onboarding
-**Goal:** Smooth transition from candidate to employee  
-- Pending onboarding tasks  
-- Orientation (Day 2-3)
-
----
-
-## 3. Performance Management
-- Evaluation performance review forms  
-- HR monitors progress and flags areas needing attention
-
----
-
-## 4. Social Recognition
-- Recognition Dashboard  
-- View leaderboard
-
----
-
-## Admin Side
-
-### Dashboard
-- Hiring stats, Open Jobs, onboarding progress, Total Employees, Recognition
-
-### Job Posting
+### Recruitment
 - Create and publish job postings (role, department, shift, location)
+- Applicants submit applications via public portal
+- HR reviews applicant profiles and resumes
+- Schedule interviews — sends automated email notification to applicant
+- Update applicant status: `Pending → Interview → Hired / Rejected`
+- **Special:** Hired applicants automatically get an employee account created and receive login credentials via email
+- Rejected applicants remain in the system for tracking
 
-### Applicant Management
-- View all applicants
-- Monitor their statuses (Pending → Interview → Hired/Rejected)
+### Onboarding
+- Track new hire onboarding tasks and progress
+- Personal information completion (emergency contact, government IDs, bank details)
+- Document submission (Government IDs, Diploma/TOR)
+- Orientation schedule (Day 1–3)
+- **Special:** Onboarding progress bar shown in employee sidebar
 
-### Interview
-- If they pass the interview, Account creation details for the portal will be sent via email
-
-### New Hire Onboarding Management
-- Tasks (form)
-- Personal Info Completion
-  - Employee must submit:
-    - Emergency contact
-    - TIN, SSS, Pag-IBIG, PhilHealth (if PH)
-    - Address & contact details
-    - Bank details
-- Document Submission
-  - Upload:
-    - Government IDs
-    - Diploma or TOR
-- Orientation Day 1–3 onboarding status
+### Employee Management
+- View and manage all active employees
+- Department management
+- View individual employee profiles
 
 ### Performance Management
-- Monitor employees
-- Monitor evaluation progress
+- Create probation reviews per employee
+- Set and track goals with statuses (Pending / In Progress / Achieved / Not Achieved)
+- Add periodic feedback entries (Strengths & Areas for Improvement)
+- Rate employees across 5 categories on a 1–5 scale
+- **Special:** Finalization checklist — all goals must be resolved, at least one feedback entry, all categories rated before finalizing
+- Finalize with: `Passed` / `Failed` / `Extended`
+- **Special:** Extended probation re-opens the review with a new start and end date
+- **Special:** Default probation duration pulled from System Settings
 
 ### Social Recognition
-- Manage the monthly/weekly leaderboard
+- HR posts recognitions with 6 award types
+- Employees react with heart reactions (AJAX — no page reload)
+- Monthly leaderboard on employee dashboard (top 5)
+- Recognition feed filterable by award type
+- **Special:** Employee Recognition History — timeline of all awards received with breakdown by type
 
+### Roles & Access Control (RBAC)
+- 3 admin roles: `Super Admin`, `HR Manager`, `Recruiter`
+- Page-level access enforced on every page load
+- Super Admin can create, assign roles, and delete admin accounts
+- **Special:** Sidebar filtered dynamically based on logged-in role
+- Unauthorized access returns HTTP 403 Access Denied page
+- Public admin registration blocked — accounts created by Super Admin only
 
-## Sample email for hired applicants
-```
+### Settings
+- **Account Settings** — change username, email, password (all roles)
+- **System Settings** — company name, HR email, probation days, email signature (Super Admin only)
+- **Special:** System settings dynamically applied to all outgoing emails and probation review date auto-fill
 
-Subject: Welcome to [Company Name]
+### Audit Logs
+- Records all admin actions across all modules
+- Filterable by module and admin user
+- Tracks: profile updates, password changes, settings changes, recognition posts, review finalizations
 
-Dear [Applicant Name],
+---
 
-Congratulations! You’ve successfully joined [Company Name].
+## Data Transfer Protocol
 
-Your portal account is ready:
+The system uses **HTTP** for all client-server communication including page loads, form submissions (POST/GET), and AJAX calls. **SMTP** is used by PHPMailer to deliver transactional emails such as interview schedules, hired credentials, and rejection notices through a configured mail server.
 
-Username: [username]
+---
 
-Temporary Password: [password]
+## Security
 
-Please log in to the portal to complete your onboarding tasks, review documents, and get started with your role.
+**Password Hashing** — All passwords are hashed using `password_hash()` with `PASSWORD_DEFAULT` (bcrypt) before being stored in the database, ensuring plain-text passwords are never saved.
 
-Welcome aboard!
+**Session Authentication** — Every admin and employee page verifies the session on every page load via `verify_admin.php` for the admin portal and `header.php` for the employee portal. Unauthenticated users are redirected to the login page.
 
-Best regards,
-[Company Name] HR Team
+**Role-Based Access Control** — Each admin page checks the logged-in user's role against a permission map on every request. If the role does not have access to that page, the system returns an HTTP 403 Access Denied page.
 
-```
-## Sample Opening Jobs
-```
-1. Front Desk Executive
-Department: Front Office
-Location: Luxor Grand Hotel, Downtown City
-Responsibilities:
+**PDO Prepared Statements** — All database queries use PDO prepared statements with bound parameters, which prevents SQL injection attacks by separating SQL logic from user-supplied data.
 
-Greet and welcome guests with a friendly attitude
-Manage check-ins and check-outs efficiently
-Handle reservations and guest inquiries
-Coordinate with housekeeping and other departments
-Maintain accurate records of guest information
+**Input Sanitization** — All user inputs are filtered using `htmlspecialchars()` on output and `FILTER_SANITIZE_*` functions on input to prevent cross-site scripting (XSS) attacks.
 
-Qualifications:
+**Directory Protection** — The `modules/` and `config/` folders are protected with `.htaccess` using `Deny from all`, preventing direct browser access to sensitive business logic and database configuration files.
 
-High school diploma or equivalent
-Previous hospitality or customer service experience preferred
-Excellent communication and interpersonal skills
-Ability to work flexible shifts, including weekends and holidays
+**Public Registration Blocked** — The admin `register.php` page redirects to login, making it impossible for anyone to self-register as an admin. Admin accounts can only be created by the Super Admin through the Roles & Access module.
 
-Benefits:
+**Environment Variables** — SMTP credentials and other sensitive configuration values are stored in a `.env` file via `phpdotenv` and are never hardcoded in the source code, reducing the risk of credential exposure.
 
-Competitive salary
-Staff meals provided
-Health insurance
-Accommodation options (if required)
-Training and career development programs
+**Audit Logs** — All admin actions across every module are recorded in the audit log, including profile updates, password changes, settings modifications, recognition posts, and review finalizations. This provides a full trail of who did what and when, allowing the Super Admin to monitor and investigate any suspicious activity.
 
+---
 
-2. Head Chef
-Department: Kitchen
-Location: Luxor Grand Hotel, Downtown City
-Responsibilities:
+## Admin Roles
 
-Lead and manage the kitchen team daily operations
-Plan, develop, and update menus seasonally
-Ensure food quality, consistency, and presentation standards
-Monitor kitchen inventory and coordinate with suppliers
-Enforce food safety and sanitation regulations
+| Role | Access |
+|---|---|
+| `Super Admin` | Full access — all modules including Roles & Access, System Settings, Audit Logs |
+| `HR Manager` | All modules except Roles & Access and System Settings |
+| `Recruiter` | Recruitment and Onboarding modules only |
 
-Qualifications:
+---
 
-Culinary degree or equivalent professional training
-Minimum 3 years experience in a similar role
-Strong leadership and team management skills
-Knowledge of local and international cuisine
+## Installation
 
-Benefits:
+1. Clone or copy the project into `htdocs/`
+2. Import all SQL files from `backup/` into your MySQL database
+3. Configure `config/Database.php` with your DB credentials
+4. Copy `.env.example` to `.env` and fill in your SMTP credentials
+5. Run `admin/migrate_rbac.php` in the browser to apply RBAC migration
+6. Delete `migrate_rbac.php` after running
+7. Visit `http://localhost/Hotel_and_Restaurant_HR1/admin/login.php`
+8. Log in with your Super Admin account
 
-Competitive salary
-Staff meals provided
-Health insurance
-Performance bonuses
-Training and career development programs
+---
 
-
-3. Restaurant Supervisor
-Department: Food & Beverage
-Location: Luxor Grand Hotel, Downtown City
-Responsibilities:
-
-Oversee daily dining room and bar operations
-Manage and schedule F&B staff
-Ensure high standards of guest service and satisfaction
-Handle guest complaints professionally and promptly
-Monitor stock levels and coordinate with the kitchen team
-
-Qualifications:
-
-Minimum 2 years F&B supervisory experience
-Strong interpersonal and leadership skills
-Knowledge of food and beverage service standards
-Ability to work under pressure in a fast-paced environment
-
-Benefits:
-
-Competitive salary
-Staff meals provided
-Health insurance
-Service charge incentives
-Training and career development programs
-
-
-4. Room Attendant
-Department: Housekeeping
-Location: Luxor Grand Hotel, Downtown City
-Responsibilities:
-
-Clean and service guest rooms and bathrooms to hotel standards
-Replenish room supplies and amenities
-Report maintenance issues or damage to supervisors
-Maintain cleanliness of hallways and public areas
-Handle guest requests and lost-and-found items properly
-
-Qualifications:
-
-Prior housekeeping experience preferred
-Physically fit and able to work on feet for extended hours
-Detail-oriented and reliable
-Ability to work flexible shifts including weekends
-
-Benefits:
-
-Competitive salary
-Staff meals provided
-Health insurance
-Uniform provided
-Training and career development programs
-
-
-5. Maintenance Technician
-Department: Maintenance
-Location: Luxor Grand Hotel, Downtown City
-Responsibilities:
-
-Perform routine and preventive maintenance on hotel facilities
-Respond promptly to repair requests from all departments
-Maintain plumbing, electrical, HVAC, and mechanical systems
-Keep maintenance logs and report major issues to management
-Ensure compliance with safety and building regulations
-
-Qualifications:
-
-Vocational or technical course in electrical, mechanical, or plumbing
-At least 2 years experience in a similar role
-Ability to troubleshoot and resolve technical issues independently
-Willing to be on call for emergency repairs
-
-Benefits:
-
-Competitive salary
-Staff meals provided
-Health insurance
-Tools and uniform provided
-Training and career development programs
-
-
-6. Sales Executive
-Department: Sales & Marketing
-Location: Luxor Grand Hotel, Downtown City
-Responsibilities:
-
-Identify and pursue new business leads and corporate accounts
-Promote hotel packages, events, and services to clients
-Prepare proposals, presentations, and sales reports
-Build and maintain long-term client relationships
-Coordinate with operations teams to deliver on client commitments
-
-Qualifications:
-
-Degree in Business, Marketing, or a related field
-At least 2 years sales experience preferably in hospitality
-Excellent communication and negotiation skills
-Self-motivated with a proven track record of meeting targets
-
-Benefits:
-
-Competitive base salary plus commission
-Staff meals provided
-Health insurance
-Travel allowance
-Training and career development programs
-
-
-7. HR Officer
-Department: Human Resources
-Location: Luxor Grand Hotel, Downtown City
-Responsibilities:
-
-Manage end-to-end recruitment and onboarding processes
-Maintain employee records and HR documentation
-Coordinate training and development programs
-Handle employee relations, grievances, and disciplinary actions
-Ensure compliance with labor laws and hotel HR policies
-
-Qualifications:
-
-Degree in Human Resources, Psychology, or a related field
-At least 2 years HR experience preferably in hospitality
-Strong knowledge of labor laws and HR best practices
-Excellent organizational and communication skills
-
-Benefits:
-
-Competitive salary
-Staff meals provided
-Health insurance
-HMO coverage
-Training and career development programs
-
-
-8. Accounting Officer
-Department: Accounting
-Location: Luxor Grand Hotel, Downtown City
-Responsibilities:
-
-Prepare and process payroll accurately and on time
-Record and reconcile daily financial transactions
-Assist in budget preparation and financial reporting
-Monitor accounts payable and receivable
-Ensure compliance with tax regulations and hotel financial policies
-
-Qualifications:
-
-Degree in Accounting, Finance, or a related field
-CPA license is an advantage
-At least 2 years accounting experience preferably in hospitality
-Proficient in accounting software and MS Excel
-High attention to detail and strong analytical skills
-
-Benefits:
-
-Competitive salary
-Staff meals provided
-Health insurance
-HMO coverage
-Training and career development programs
-```
+> Built for Luxor Grand Hotel — Hotel & Restaurant HR System (HR1)

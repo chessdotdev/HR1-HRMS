@@ -1,7 +1,13 @@
 <?php
+session_start();
 require_once '../modules/Employee.php';
+require_once '../modules/AuditLog.php';
+require_once 'includes/verify_admin.php';
 
 $employeeObj = new Employee();
+$audit = new AuditLog();
+$admin_id   = $_SESSION['admin_id'];
+$admin_name = $_SESSION['admin_username'];
 $employee_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if (!$employee_id) { header("Location: new_hires.php"); exit(); }
@@ -26,15 +32,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'approve_personal_info':
             $employeeObj->approvePersonalInfo($employee_id);
+            $audit->log($admin_id, $admin_name, 'Approve Personal Info', 'Onboarding', "Approved personal info for employee ID {$employee_id}");
             $actionMsg = 'Personal information approved.'; $actionType = 'success'; break;
         case 'reject_personal_info':
             $employeeObj->rejectPersonalInfo($employee_id);
+            $audit->log($admin_id, $admin_name, 'Reject Personal Info', 'Onboarding', "Rejected personal info for employee ID {$employee_id}");
             $actionMsg = 'Personal information rejected. Employee will be notified to re-submit.'; $actionType = 'danger'; break;
         case 'approve_documents':
             $employeeObj->approveDocuments($employee_id);
+            $audit->log($admin_id, $admin_name, 'Approve Documents', 'Onboarding', "Approved documents for employee ID {$employee_id}");
             $actionMsg = 'Documents approved.'; $actionType = 'success'; break;
         case 'reject_documents':
             $employeeObj->rejectDocuments($employee_id);
+            $audit->log($admin_id, $admin_name, 'Reject Documents', 'Onboarding', "Rejected documents for employee ID {$employee_id}");
             $actionMsg = 'Documents rejected. Employee will be notified to re-upload.'; $actionType = 'danger'; break;
     }
     $onboarding = $employeeObj->getOnboardingData($employee_id);
@@ -57,8 +67,10 @@ $progress = $employeeObj->getOnboardingProgress($employee_id);
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h2 class="mb-0">
-                <?= htmlspecialchars($employee['firstname'].' '.$employee['lastname']). ' ' ?>
-                <?=ucfirst($employee['suffix']) ? ucfirst($employee['suffix']).'.' : null ?>
+            <?= htmlspecialchars($employee['firstname'] . ' ' . $employee['lastname']) . ' ' ?>
+                <?= (!empty($employee['suffix']) && strtolower($employee['suffix']) !== 'none') 
+                    ? ucfirst($employee['suffix']) . '.' 
+        : null ?>
             </h2>
             <p class="text-muted mb-0">New Hire Details & Onboarding Progress</p>
         </div>
@@ -72,12 +84,12 @@ $progress = $employeeObj->getOnboardingProgress($employee_id);
                 <span>Overall Completion</span>
                 <span class="fs-4 fw-bold"><?= $progress ?>%</span>
             </div>
-            <div class="progress" style="height: 25px;">
+            <div class="progress" style="height: 15px;">
                 <div class="progress-bar" role="progressbar" style="width: <?= $progress ?>%">
                     <?= $progress ?>%
                 </div>
             </div>
-            <div class="row mt-3">
+            <div class="row mt-0">
                 <div class="col-md-4">
                     <small class="text-muted">Personal Information</small>
                     <p class="mb-0">
@@ -157,16 +169,16 @@ $progress = $employeeObj->getOnboardingProgress($employee_id);
 
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    Personal Information
-                    <?php if ($piStatus === 'Pending Review'): ?>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                    Submitted Documents
+                    <?php if ($docStatus === 'Pending Review'): ?>
                         <div class="d-flex gap-1">
                             <form method="POST">
-                                <input type="hidden" name="action" value="approve_personal_info">
+                                <input type="hidden" name="action" value="approve_documents">
                                 <button class="btn btn-sm btn-success"><i class="bi bi-check-lg"></i> Approve</button>
                             </form>
                             <form method="POST">
-                                <input type="hidden" name="action" value="reject_personal_info">
+                                <input type="hidden" name="action" value="reject_documents">
                                 <button class="btn btn-sm btn-danger"><i class="bi bi-x-lg"></i> Reject</button>
                             </form>
                         </div>
@@ -210,15 +222,15 @@ $progress = $employeeObj->getOnboardingProgress($employee_id);
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    Submitted Documents
-                    <?php if ($docStatus === 'Pending Review'): ?>
+                    Other Information
+                    <?php if ($piStatus === 'Pending Review'): ?>
                         <div class="d-flex gap-1">
                             <form method="POST">
-                                <input type="hidden" name="action" value="approve_documents">
+                                <input type="hidden" name="action" value="approve_personal_info">
                                 <button class="btn btn-sm btn-success"><i class="bi bi-check-lg"></i> Approve</button>
                             </form>
                             <form method="POST">
-                                <input type="hidden" name="action" value="reject_documents">
+                                <input type="hidden" name="action" value="reject_personal_info">
                                 <button class="btn btn-sm btn-danger"><i class="bi bi-x-lg"></i> Reject</button>
                             </form>
                         </div>
