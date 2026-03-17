@@ -45,7 +45,7 @@ $recentJobs = array_slice($allJobsStmt->fetchAll(PDO::FETCH_ASSOC), 0, 3);
 
     <div class="row g-4 mb-4">
         <div class="col-md-3">
-            <div class="card text-white bg-primary">
+            <div class="card text-white bg-dark">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -54,12 +54,12 @@ $recentJobs = array_slice($allJobsStmt->fetchAll(PDO::FETCH_ASSOC), 0, 3);
                         </div>
                         <i class="bi bi-briefcase" style="font-size: 2.5rem; opacity: 0.5;"></i>
                     </div>
-                    <a href="job_openings.php" class="btn btn-light btn-sm mt-3">Manage Jobs</a>
+                    <a href="job_openings.php" class="btn btn-light fw-bold btn-sm mt-3">Manage Jobs</a>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-warning">
+            <div class="card text-white bg-dark">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -68,12 +68,12 @@ $recentJobs = array_slice($allJobsStmt->fetchAll(PDO::FETCH_ASSOC), 0, 3);
                         </div>
                         <i class="bi bi-person-lines-fill" style="font-size: 2.5rem; opacity: 0.5;"></i>
                     </div>
-                    <a href="applicants.php" class="btn btn-light btn-sm mt-3">View Applicants</a>
+                    <a href="applicants.php" class="btn btn-light fw-bold btn-sm mt-3">View Applicants</a>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-info">
+            <div class="card text-white bg-dark">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -82,12 +82,12 @@ $recentJobs = array_slice($allJobsStmt->fetchAll(PDO::FETCH_ASSOC), 0, 3);
                         </div>
                         <i class="bi bi-calendar-check" style="font-size: 2.5rem; opacity: 0.5;"></i>
                     </div>
-                    <a href="interviews.php" class="btn btn-light btn-sm mt-3">View Interviews</a>
+                    <a href="interviews.php" class="btn btn-light fw-bold btn-sm mt-3">View Interviews</a>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card text-white bg-success">
+            <div class="card text-white bg-dark">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -96,7 +96,7 @@ $recentJobs = array_slice($allJobsStmt->fetchAll(PDO::FETCH_ASSOC), 0, 3);
                         </div>
                         <i class="bi bi-person-check-fill" style="font-size: 2.5rem; opacity: 0.5;"></i>
                     </div>
-                    <a href="employee_list.php" class="btn btn-light btn-sm mt-3">View Employees</a>
+                    <a href="employee_list.php" class="btn btn-light fw-bold btn-sm mt-3">View Employees</a>
                 </div>
             </div>
         </div>
