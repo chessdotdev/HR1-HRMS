@@ -23,3 +23,11 @@ INSERT INTO `departments` (`name`, `description`) VALUES
 ('Sales & Marketing', 'Promotions, client relations, marketing campaigns'),
 ('Human Resources', 'Recruitment, employee relations, training'),
 ('Accounting', 'Finance, payroll, budgeting');
+
+-- Add department to employees
+ALTER TABLE `employees`
+ADD COLUMN IF NOT EXISTS `department` VARCHAR(100) DEFAULT NULL AFTER `applicant_id`;
+
+-- Add department to applicantss
+ALTER TABLE `applicantss`
+ADD COLUMN IF NOT EXISTS `department` VARCHAR(100) DEFAULT NULL AFTER `job_title`;

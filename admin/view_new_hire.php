@@ -170,48 +170,71 @@ $progress = $employeeObj->getOnboardingProgress($employee_id);
         <div class="col-md-6">
             <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                    Submitted Documents
-                    <?php if ($docStatus === 'Pending Review'): ?>
+                    Personal Information
+                    <?php if ($piStatus === 'Pending Review'): ?>
                         <div class="d-flex gap-1">
                             <form method="POST">
-                                <input type="hidden" name="action" value="approve_documents">
-                                <button class="btn btn-sm btn-success"><i class="bi bi-check-lg"></i> Approve</button>
+                                <input type="hidden" name="action" value="approve_personal_info">
+                                <button class="btn btn-sm btn-success" onclick="return confirm('Approve personal information for this employee?')"><i class="bi bi-check-lg"></i> Approve</button>
                             </form>
                             <form method="POST">
-                                <input type="hidden" name="action" value="reject_documents">
-                                <button class="btn btn-sm btn-danger"><i class="bi bi-x-lg"></i> Reject</button>
+                                <input type="hidden" name="action" value="reject_personal_info">
+                                <button class="btn btn-sm btn-danger" onclick="return confirm('Reject personal information? The employee will need to re-submit.')"><i class="bi bi-x-lg"></i> Reject</button>
                             </form>
                         </div>
                     <?php endif; ?>
                 </div>
                 <div class="card-body">
                     <?php if (in_array($piStatus, ['Pending Review', 'Approved', 'Rejected'])): ?>
-                        <table class="table table-sm">
-                            <tr>
-                                <td class="text-muted">Emergency Contact:</td>
-                                <td><?= htmlspecialchars($onboarding['emergency_contact']) ?></td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">Emergency Phone:</td>
-                                <td><?= htmlspecialchars($onboarding['emergency_phone']) ?></td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">TIN:</td>
-                                <td><?= htmlspecialchars($onboarding['tin_number']) ?></td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">SSS:</td>
-                                <td><?= htmlspecialchars($onboarding['sss_number']) ?></td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">Pag-IBIG:</td>
-                                <td><?= htmlspecialchars($onboarding['pagibig_number']) ?></td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">PhilHealth:</td>
-                                <td><?= htmlspecialchars($onboarding['philhealth_number']) ?></td>
-                            </tr>
+                        <table class="table table-sm mb-3">
+                            <tr><td class="text-muted">Emergency Contact:</td><td><?= htmlspecialchars($onboarding['emergency_contact']) ?></td></tr>
+                            <tr><td class="text-muted">Emergency Phone:</td><td><?= htmlspecialchars($onboarding['emergency_phone']) ?></td></tr>
+                            <tr><td class="text-muted">Relationship:</td><td><?= htmlspecialchars($onboarding['emergency_relationship']) ?></td></tr>
+                            <tr><td class="text-muted">Address:</td><td><?= htmlspecialchars($onboarding['address'] . ', ' . $onboarding['city'] . ', ' . $onboarding['province']) ?></td></tr>
+                            <tr><td class="text-muted">Bank:</td><td><?= htmlspecialchars($onboarding['bank_name']) ?> &mdash; <?= htmlspecialchars($onboarding['bank_account_number']) ?></td></tr>
                         </table>
+
+                        <!-- Government IDs with photos -->
+                        <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:#71717a;margin-bottom:8px;">Government IDs</div>
+                        <?php
+                        $idRows = [
+                            'TIN'       => ['number' => $onboarding['tin_number'],         'path' => $onboarding['tin_photo_path'] ?? ''],
+                            'SSS'       => ['number' => $onboarding['sss_number'],         'path' => $onboarding['sss_photo_path'] ?? ''],
+                            'Pag-IBIG'  => ['number' => $onboarding['pagibig_number'],     'path' => $onboarding['pagibig_photo_path'] ?? ''],
+                            'PhilHealth'=> ['number' => $onboarding['philhealth_number'],  'path' => $onboarding['philhealth_photo_path'] ?? ''],
+                        ];
+                        foreach ($idRows as $label => $val): ?>
+                        <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom:1px solid #f4f4f5;">
+                            <div>
+                                <div style="font-size:0.72rem;color:#71717a;"><?= $label ?></div>
+                                <div style="font-size:0.88rem;font-weight:500;"><?= htmlspecialchars($val['number'] ?? '—') ?></div>
+                            </div>
+                            <?php if (!empty($val['path'])): ?>
+                                <a href="../public/<?= htmlspecialchars($val['path']) ?>" target="_blank"
+                                   style="display:flex;align-items:center;gap:6px;text-decoration:none;">
+                                    <img src="../public/<?= htmlspecialchars($val['path']) ?>" style="height:40px;width:64px;object-fit:cover;border-radius:6px;border:1px solid #e4e4e7;">
+                                    <span style="font-size:0.72rem;color:#71717a;"><i class="bi bi-eye"></i> View</span>
+                                </a>
+                            <?php else: ?>
+                                <span class="text-muted" style="font-size:0.75rem;"><i class="bi bi-image me-1"></i>No photo</span>
+                            <?php endif; ?>
+                        </div>
+                        <?php endforeach; ?>
+
+                        <!-- Bank photo -->
+                        <?php if (!empty($onboarding['bank_photo_path'])): ?>
+                        <div class="d-flex justify-content-between align-items-center pt-2">
+                            <div>
+                                <div style="font-size:0.72rem;color:#71717a;">Bank Photo</div>
+                                <div style="font-size:0.88rem;font-weight:500;"><?= htmlspecialchars($onboarding['bank_name']) ?></div>
+                            </div>
+                            <a href="../public/<?= htmlspecialchars($onboarding['bank_photo_path']) ?>" target="_blank"
+                               style="display:flex;align-items:center;gap:6px;text-decoration:none;">
+                                <img src="../public/<?= htmlspecialchars($onboarding['bank_photo_path']) ?>" style="height:40px;width:64px;object-fit:cover;border-radius:6px;border:1px solid #e4e4e7;">
+                                <span style="font-size:0.72rem;color:#71717a;"><i class="bi bi-eye"></i> View</span>
+                            </a>
+                        </div>
+                        <?php endif; ?>
                     <?php else: ?>
                         <p class="text-muted text-center py-3">Not yet submitted</p>
                     <?php endif; ?>
@@ -222,16 +245,16 @@ $progress = $employeeObj->getOnboardingProgress($employee_id);
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    Other Information
-                    <?php if ($piStatus === 'Pending Review'): ?>
+                    Submitted Documents
+                    <?php if ($docStatus === 'Pending Review'): ?>
                         <div class="d-flex gap-1">
                             <form method="POST">
-                                <input type="hidden" name="action" value="approve_personal_info">
-                                <button class="btn btn-sm btn-success"><i class="bi bi-check-lg"></i> Approve</button>
+                                <input type="hidden" name="action" value="approve_documents">
+                                <button class="btn btn-sm btn-success" onclick="return confirm('Approve submitted documents for this employee?')"><i class="bi bi-check-lg"></i> Approve</button>
                             </form>
                             <form method="POST">
-                                <input type="hidden" name="action" value="reject_personal_info">
-                                <button class="btn btn-sm btn-danger"><i class="bi bi-x-lg"></i> Reject</button>
+                                <input type="hidden" name="action" value="reject_documents">
+                                <button class="btn btn-sm btn-danger" onclick="return confirm('Reject documents? The employee will need to re-upload.')"><i class="bi bi-x-lg"></i> Reject</button>
                             </form>
                         </div>
                     <?php endif; ?>

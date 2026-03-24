@@ -103,7 +103,9 @@ include 'includes/header.php';
                     <div>
                         <h1 class="h2 mb-1 fw-bold text-dark">
                             <?= htmlspecialchars($app['firstname'].' '.$app['lastname']). ' ' ?>
-                            <?=ucfirst($app['suffix']) ? ucfirst($app['suffix']).'.' : null ?>
+                            <?= (!empty($app['suffix']) && strtolower($app['suffix']) !== 'none') 
+                                ? ucfirst($app['suffix']) . '.' 
+                                : null ?>
                         </h1>
                         <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-<?= strtolower($app['status']) == 'interview' ? 'info' : 'secondary' ?> fs-6 px-3 py-2">
@@ -146,7 +148,7 @@ include 'includes/header.php';
                             <div class="col-md-6">
                                 <div class="info-item">
                                     <label class="form-label fw-semibold text-muted small mb-1">Suffix</label>
-                                    <p class="h6 mb-0"><?= htmlspecialchars(strtoupper($app['suffix'] ?? 'None')) ?></p>
+                                    <p class="h6 mb-0"><?= htmlspecialchars(ucfirst($app['suffix'] ?? 'None')) ?></p>
                                 </div>
                             </div>
                             <div class="col-md-6">

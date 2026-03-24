@@ -60,6 +60,10 @@ if (!$employee) {
                             <td><?= htmlspecialchars($employee['job_title'] ?? 'N/A') ?></td>
                         </tr>
                         <tr>
+                            <td class="text-muted">Department:</td>
+                            <td><?= htmlspecialchars($employee['department'] ?? '—') ?></td>
+                        </tr>
+                        <tr>
                             <td class="text-muted">Employment Status:</td>
                             <td>
                                 <span class="badge bg-<?= $employee['employment_status'] === 'Active' ? 'success' : 'warning' ?>">

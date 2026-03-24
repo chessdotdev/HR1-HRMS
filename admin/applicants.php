@@ -57,6 +57,9 @@ $applicants = $applicantObj->getApplicants('Pending');
 
                                     <div>
                                         <?= htmlspecialchars($app['firstname'].' '.$app['lastname']) ?>
+                                        <?= (!empty($app['suffix']) && strtolower($app['suffix']) !== 'none') 
+                                        ? ucfirst($app['suffix']) . '.' 
+                                        : null ?>
                                     </div>
 
                                 </div>

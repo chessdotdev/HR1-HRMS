@@ -31,6 +31,10 @@ include 'includes/header.php';
                 <p class="mb-0"><?= htmlspecialchars($employee['job_title'] ?? 'N/A') ?></p>
             </div>
             <div class="col-md-6 mb-3">
+                <small class="text-muted">Department</small>
+                <p class="mb-0"><?= htmlspecialchars($employee['department'] ?? 'N/A') ?></p>
+            </div>
+            <div class="col-md-6 mb-3">
                 <small class="text-muted">Birthdate</small>
                 <p class="mb-0"><?= htmlspecialchars($employee['birthdate'] ?? 'N/A') ?></p>
             </div>

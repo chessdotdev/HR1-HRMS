@@ -37,8 +37,7 @@ class Applicants {
         $stmt->bindParam(':applicant_id', $applicant_id, PDO::PARAM_INT);
         $stmt->execute();
         $existingStatus = $stmt->fetch(PDO::FETCH_ASSOC);
-
-
+        
         if($existingStatus){
             if ($existingStatus['status'] === 'Pending') {
                 return ['success' => false, 'message' => 'You already have a pending application.'];
@@ -50,7 +49,7 @@ class Applicants {
                 return ['success' => false, 'message' => 'You are already a hired employee.'];
             }
         }
-    
+        
         $insertQuery = "INSERT INTO " . $this->table_name . " 
             (applicant_id, job_id, job_title, firstname, lastname, middle_name, suffix, birthdate, age, phone, gender, civil_status, city, province, nationality, email, skills, resume_path)
             VALUES 
@@ -233,6 +232,7 @@ public function updateStatus($id,$status){
                         <p>Dear <strong>$name</strong>,</p>
                         <p>We are pleased to inform you that your interview at <strong>$company</strong> has been scheduled.</p>
                         <div style='margin:20px 0;padding:15px;background:#fff;border-left:4px solid #4a90e2;'>
+                            <p><strong>Applicant ID:</strong> APP-{$applicant_id}</p>
                             <p><strong>Date:</strong> $date</p>
                             <p><strong>Time:</strong> $time</p>
                             <p><strong>Interview Type:</strong> $type</p>
@@ -250,20 +250,20 @@ public function updateStatus($id,$status){
         }
     }
     
-    public function updateInterviewResult($interview_id, $result){
-        // Get interview details first
+    public function updateInterviewResult($interview_id, $result, $interviewer_id = null, $interviewer_name = null){
         $stmt = $this->conn->prepare("SELECT * FROM interviews WHERE interview_id = :interview_id");
         $stmt->bindParam(':interview_id', $interview_id, PDO::PARAM_INT);
         $stmt->execute();
         $interview = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Update interview result
         $stmt = $this->conn->prepare("
             UPDATE interviews 
-            SET result = :result 
+            SET result = :result, interviewer_id = :iid, interviewer_name = :iname
             WHERE interview_id = :interview_id
         ");
         $stmt->bindParam(':result', $result);
+        $stmt->bindParam(':iid', $interviewer_id);
+        $stmt->bindParam(':iname', $interviewer_name);
         $stmt->bindParam(':interview_id', $interview_id, PDO::PARAM_INT);
     
         $success = $stmt->execute();

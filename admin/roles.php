@@ -92,7 +92,7 @@ $roles  = RBAC::roles();
     <?php endif; ?>
 
     <!-- Role Legend -->
-    <div class="row g-3 mb-4">
+    <!-- <div class="row g-3 mb-4">
         <div class="col-md-4">
             <div class="card"><div class="card-body">
                 <span class="badge bg-dark mb-2">Super Admin</span>
@@ -111,7 +111,7 @@ $roles  = RBAC::roles();
                 <p class="text-muted small mb-0">Recruitment and Onboarding modules only.</p>
             </div></div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Admin Accounts Table -->
     <div class="card">

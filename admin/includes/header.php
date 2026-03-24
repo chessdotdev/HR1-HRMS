@@ -56,6 +56,7 @@ $_role = $_SESSION['admin_role'] ?? 'recruiter';
                     <li class="sidebar-item"><a href="applicants.php" class="sidebar-link">Applicants</a></li>
                     <li class="sidebar-item"><a href="interviews.php" class="sidebar-link">Interviews</a></li>
                     <li class="sidebar-item"><a href="applicant_status.php" class="sidebar-link">Hiring Status</a></li>
+                    <li class="sidebar-item"><a href="exam_questions.php" class="sidebar-link">Exam Questions</a></li>
                 </ul>
             </li>
 

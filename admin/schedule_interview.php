@@ -6,10 +6,10 @@ $applicantObj = new Applicants();
 $audit = new AuditLog();
 
 if($_SERVER['REQUEST_METHOD']=='POST'){
-    $applicant_id = $_POST['applicant_id'];
-    $date = $_POST['date'];
-    $time = $_POST['time'];
-    $type = $_POST['type'];
+    $applicant_id    = $_POST['applicant_id'];
+    $date            = $_POST['date'];
+    $time            = $_POST['time'];
+    $type            = $_POST['type'];
 
     if($applicantObj->scheduleInterview($applicant_id, $date, $time, $type)){
         if (isset($_SESSION['admin_id'])) {

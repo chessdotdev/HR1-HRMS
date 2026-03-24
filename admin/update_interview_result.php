@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         exit;
     }
 
-    $success = $applicantObj->updateInterviewResult($interview_id, $result);
+    $success = $applicantObj->updateInterviewResult($interview_id, $result, $_SESSION['admin_id'] ?? null, $_SESSION['admin_username'] ?? null);
 
     if($success){
         if (isset($_SESSION['admin_id'])) {

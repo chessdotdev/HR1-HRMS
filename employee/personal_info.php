@@ -33,7 +33,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isLocked) {
         'postal_code'            => trim($_POST['postal_code'] ?? ''),
         'bank_name'              => trim($_POST['bank_name'] ?? ''),
         'bank_account_number'    => trim($_POST['bank_account_number'] ?? ''),
+        'tin_photo_path'         => null,
+        'sss_photo_path'         => null,
+        'pagibig_photo_path'     => null,
+        'philhealth_photo_path'  => null,
+        'id_photo_path'          => null,
+        'bank_photo_path'        => null,
     ];
+
+    $uploadDir = '../public/uploads/personal/';
+    if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+
+    // Handle each photo upload
+    $photoFields = [
+        'tin_photo'         => 'tin_photo_path',
+        'sss_photo'         => 'sss_photo_path',
+        'pagibig_photo'     => 'pagibig_photo_path',
+        'philhealth_photo'  => 'philhealth_photo_path',
+        'bank_photo'        => 'bank_photo_path',
+    ];
+    foreach ($photoFields as $inputName => $dataKey) {
+        if (!empty($_FILES[$inputName]['name'])) {
+            $ext = strtolower(pathinfo($_FILES[$inputName]['name'], PATHINFO_EXTENSION));
+            if (!in_array($ext, ['jpg','jpeg','png','webp'])) {
+                $errors[] = ucfirst(str_replace('_', ' ', $inputName)) . ' must be JPG, PNG, or WEBP.';
+            } else {
+                $filename = $inputName . '_' . $_SESSION['employee_id'] . '_' . time() . '.' . $ext;
+                if (move_uploaded_file($_FILES[$inputName]['tmp_name'], $uploadDir . $filename)) {
+                    $data[$dataKey] = 'uploads/personal/' . $filename;
+                }
+            }
+        }
+    }
 
     validateField($data['emergency_contact'], 'Emergency contact name', $errors);
     validateField($data['emergency_phone'], 'Emergency contact phone', $errors);
@@ -152,22 +183,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isLocked) {
     <div class="card">
         <div class="card-header">Government IDs</div>
         <div class="card-body">
-            <div class="info-row">
-                <span class="info-label">TIN Number</span>
-                <span class="info-value"><?= htmlspecialchars($onboarding['tin_number']) ?></span>
+            <?php
+            $idReview = [
+                'TIN Number'      => ['number'=>$onboarding['tin_number'],      'path'=>$onboarding['tin_photo_path'] ?? ''],
+                'SSS Number'      => ['number'=>$onboarding['sss_number'],      'path'=>$onboarding['sss_photo_path'] ?? ''],
+                'Pag-IBIG Number' => ['number'=>$onboarding['pagibig_number'],  'path'=>$onboarding['pagibig_photo_path'] ?? ''],
+                'PhilHealth Number'=> ['number'=>$onboarding['philhealth_number'],'path'=>$onboarding['philhealth_photo_path'] ?? ''],
+            ];
+            foreach ($idReview as $label => $val):
+            ?>
+            <div class="info-row d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="info-label"><?= $label ?></span>
+                    <span class="info-value"><?= htmlspecialchars($val['number']) ?></span>
+                </div>
+                <?php if (!empty($val['path'])): ?>
+                <a href="../public/<?= htmlspecialchars($val['path']) ?>" target="_blank"
+                   style="display:flex;align-items:center;gap:6px;text-decoration:none;">
+                    <img src="../public/<?= htmlspecialchars($val['path']) ?>" style="height:44px;width:70px;object-fit:cover;border-radius:6px;border:1px solid #e4e4e7;">
+                    <span style="font-size:0.75rem;color:#71717a;"><i class="bi bi-eye"></i> View</span>
+                </a>
+                <?php else: ?>
+                <span class="text-muted" style="font-size:0.78rem;"><i class="bi bi-image"></i> No photo</span>
+                <?php endif; ?>
             </div>
-            <div class="info-row">
-                <span class="info-label">SSS Number</span>
-                <span class="info-value"><?= htmlspecialchars($onboarding['sss_number']) ?></span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Pag-IBIG Number</span>
-                <span class="info-value"><?= htmlspecialchars($onboarding['pagibig_number']) ?></span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">PhilHealth Number</span>
-                <span class="info-value"><?= htmlspecialchars($onboarding['philhealth_number']) ?></span>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 
@@ -202,7 +242,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isLocked) {
             </div>
             <div class="info-row">
                 <span class="info-label">Account Number</span>
-                <span class="info-value"><?= htmlspecialchars($onboarding['bank_account_number']) ?></span>
+                <span class="info-value">
+                    <?= htmlspecialchars($onboarding['bank_account_number']) ?>
+                    <?php if (!empty($onboarding['bank_photo_path'])): ?>
+                        <a href="../public/<?= htmlspecialchars($onboarding['bank_photo_path']) ?>" target="_blank" class="ms-2">
+                            <img src="../public/<?= htmlspecialchars($onboarding['bank_photo_path']) ?>" style="max-height:50px;border-radius:4px;border:1px solid #e4e4e7;vertical-align:middle;">
+                        </a>
+                    <?php endif; ?>
+                </span>
             </div>
         </div>
     </div>
@@ -216,7 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isLocked) {
         </div>
     <?php endif; ?>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         <div class="card">
             <div class="card-header">Emergency Contact Information</div>
             <div class="card-body">
@@ -251,30 +298,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isLocked) {
             <div class="card-header">Government ID Numbers (Philippines)</div>
             <div class="card-body">
                 <div class="row g-3">
+                    <?php
+                    $idFields = [
+                        ['label'=>'TIN Number','name'=>'tin_number','photo'=>'tin_photo','path'=>'tin_photo_path','placeholder'=>'000-000-000-000'],
+                        ['label'=>'SSS Number','name'=>'sss_number','photo'=>'sss_photo','path'=>'sss_photo_path','placeholder'=>'00-0000000-0'],
+                        ['label'=>'Pag-IBIG Number','name'=>'pagibig_number','photo'=>'pagibig_photo','path'=>'pagibig_photo_path','placeholder'=>'0000-0000-0000'],
+                        ['label'=>'PhilHealth Number','name'=>'philhealth_number','photo'=>'philhealth_photo','path'=>'philhealth_photo_path','placeholder'=>'00-000000000-0'],
+                    ];
+                    foreach ($idFields as $f):
+                    ?>
                     <div class="col-md-6">
-                        <label class="form-label">TIN Number *</label>
-                        <input type="text" name="tin_number" class="form-control"
-                               placeholder="000-000-000-000"
-                               value="<?= htmlspecialchars($onboarding['tin_number'] ?? '') ?>" required>
+                        <div class="p-3 rounded" style="border:1px solid #e4e4e7;background:#fafafa;">
+                            <label class="form-label fw-semibold mb-1" style="font-size:0.85rem;"><?= $f['label'] ?> *</label>
+                            <input type="text" name="<?= $f['name'] ?>" class="form-control form-control-sm mb-2"
+                                   placeholder="<?= $f['placeholder'] ?>"
+                                   value="<?= htmlspecialchars($onboarding[$f['name']] ?? '') ?>" required>
+                            <div class="upload-area" style="border:1.5px dashed #d4d4d8;border-radius:8px;padding:10px;text-align:center;background:#fff;cursor:pointer;" onclick="document.getElementById('<?= $f['photo'] ?>').click()">
+                                <?php if (!empty($onboarding[$f['path']])): ?>
+                                    <img src="../public/<?= htmlspecialchars($onboarding[$f['path']]) ?>" id="preview_<?= $f['photo'] ?>" style="max-height:80px;border-radius:6px;object-fit:cover;">
+                                    <div class="text-muted mt-1" style="font-size:0.72rem;">Click to replace</div>
+                                <?php else: ?>
+                                    <div id="preview_<?= $f['photo'] ?>_wrap">
+                                        <i class="bi bi-cloud-upload" style="font-size:1.4rem;color:#a1a1aa;"></i>
+                                        <div style="font-size:0.75rem;color:#71717a;margin-top:2px;">Click to upload photo</div>
+                                    </div>
+                                    <img id="preview_<?= $f['photo'] ?>" style="max-height:80px;border-radius:6px;object-fit:cover;display:none;">
+                                <?php endif; ?>
+                            </div>
+                            <input type="file" id="<?= $f['photo'] ?>" name="<?= $f['photo'] ?>" accept="image/*" class="d-none" onchange="previewImg(this,'preview_<?= $f['photo'] ?>','preview_<?= $f['photo'] ?>_wrap')">
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">SSS Number *</label>
-                        <input type="text" name="sss_number" class="form-control"
-                               placeholder="00-0000000-0"
-                               value="<?= htmlspecialchars($onboarding['sss_number'] ?? '') ?>" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Pag-IBIG Number *</label>
-                        <input type="text" name="pagibig_number" class="form-control"
-                               placeholder="0000-0000-0000"
-                               value="<?= htmlspecialchars($onboarding['pagibig_number'] ?? '') ?>" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">PhilHealth Number *</label>
-                        <input type="text" name="philhealth_number" class="form-control"
-                               placeholder="00-000000000-0"
-                               value="<?= htmlspecialchars($onboarding['philhealth_number'] ?? '') ?>" required>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
@@ -328,6 +382,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isLocked) {
                         <input type="text" name="bank_account_number" class="form-control"
                                value="<?= htmlspecialchars($onboarding['bank_account_number'] ?? '') ?>" required>
                     </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold mb-1" style="font-size:0.85rem;">Bank Passbook / ATM Card Photo</label>
+                        <div class="upload-area" style="border:1.5px dashed #d4d4d8;border-radius:8px;padding:10px;text-align:center;background:#fff;cursor:pointer;max-width:320px;" onclick="document.getElementById('bank_photo').click()">
+                            <?php if (!empty($onboarding['bank_photo_path'])): ?>
+                                <img src="../public/<?= htmlspecialchars($onboarding['bank_photo_path']) ?>" id="preview_bank_photo" style="max-height:80px;border-radius:6px;object-fit:cover;">
+                                <div class="text-muted mt-1" style="font-size:0.72rem;">Click to replace</div>
+                            <?php else: ?>
+                                <div id="preview_bank_photo_wrap">
+                                    <i class="bi bi-credit-card" style="font-size:1.4rem;color:#a1a1aa;"></i>
+                                    <div style="font-size:0.75rem;color:#71717a;margin-top:2px;">Click to upload bank photo</div>
+                                </div>
+                                <img id="preview_bank_photo" style="max-height:80px;border-radius:6px;object-fit:cover;display:none;">
+                            <?php endif; ?>
+                        </div>
+                        <input type="file" id="bank_photo" name="bank_photo" accept="image/*" class="d-none" onchange="previewImg(this,'preview_bank_photo','preview_bank_photo_wrap')">
+                    </div>
                 </div>
             </div>
         </div>
@@ -345,5 +415,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isLocked) {
     </form>
 
 <?php endif; ?>
+
+<script>
+function previewImg(input, previewId, wrapId) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = document.getElementById(previewId);
+            img.src = e.target.result;
+            img.style.display = 'block';
+            const wrap = document.getElementById(wrapId);
+            if (wrap) wrap.style.display = 'none';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
 
 <?php include 'includes/footer.php'; ?>

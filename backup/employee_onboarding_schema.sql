@@ -78,3 +78,16 @@ ADD UNIQUE INDEX IF NOT EXISTS `idx_username` (`username`);
 ALTER TABLE `employee_onboarding`
 ADD COLUMN IF NOT EXISTS `personal_info_status` ENUM('Not Submitted', 'Pending Review', 'Approved', 'Rejected') DEFAULT 'Not Submitted' AFTER `personal_info_completed`,
 ADD COLUMN IF NOT EXISTS `documents_status` ENUM('Not Submitted', 'Pending Review', 'Approved', 'Rejected') DEFAULT 'Not Submitted' AFTER `documents_submitted`;
+
+-- Add ID and bank photo upload columns
+ALTER TABLE `employee_onboarding`
+ADD COLUMN IF NOT EXISTS `id_photo_path` VARCHAR(255) DEFAULT NULL COMMENT 'Government ID photo upload',
+ADD COLUMN IF NOT EXISTS `bank_photo_path` VARCHAR(255) DEFAULT NULL COMMENT 'Bank passbook/card photo upload';
+
+-- Add individual ID photo columns
+ALTER TABLE `employee_onboarding`
+ADD COLUMN IF NOT EXISTS `tin_photo_path` VARCHAR(255) DEFAULT NULL,
+ADD COLUMN IF NOT EXISTS `sss_photo_path` VARCHAR(255) DEFAULT NULL,
+ADD COLUMN IF NOT EXISTS `pagibig_photo_path` VARCHAR(255) DEFAULT NULL,
+ADD COLUMN IF NOT EXISTS `philhealth_photo_path` VARCHAR(255) DEFAULT NULL,
+ADD COLUMN IF NOT EXISTS `bank_photo_path` VARCHAR(255) DEFAULT NULL;

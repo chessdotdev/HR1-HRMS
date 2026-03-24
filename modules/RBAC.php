@@ -13,7 +13,7 @@ class RBAC {
 
     // Pages each role can access (filename without .php)
     private static function permissions(): array {
-        $recruitment = ['dashboard','job_openings','applicants','view_applicant','applicant_status','interviews','schedule_interview','update_interview_result','update_status','hiring_status'];
+        $recruitment = ['dashboard','job_openings','applicants','view_applicant','applicant_status','interviews','schedule_interview','update_interview_result','update_status','hiring_status','exam_questions','view_exam_results'];
         $onboarding  = ['new_hires','view_new_hire','onboarding_tasks','orientation_schedule'];
         $employees   = ['employee_list','view_employee','departments'];
         $performance = ['evaluation_forms','evaluation_results'];

@@ -5,9 +5,10 @@ $db = new Database();
 $conn = $db->connect();
 
 // Get all active employees
-$query = "SELECT e.*, a.firstname, a.lastname, a.email, a.phone, a.job_title
+$query = "SELECT e.*, a.firstname, a.lastname, a.email, a.phone, a.job_title, j.department
           FROM employees e
           LEFT JOIN applicantss a ON e.applicant_id = a.apply_id
+          LEFT JOIN job_openings j ON j.id = a.job_id
           WHERE e.employment_status = 'Active'
           ORDER BY e.hired_at DESC";
 
@@ -108,6 +109,7 @@ foreach ($employees as $emp) {
                                 <th>Employee ID</th>
                                 <th>Name</th>
                                 <th>Job Title</th>
+                                <th>Department</th>
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Hired Date</th>
@@ -127,6 +129,7 @@ foreach ($employees as $emp) {
                                         </div>
                                     </td>
                                     <td><?= htmlspecialchars($emp['job_title'] ?? 'N/A') ?></td>
+                                    <td><?= htmlspecialchars($emp['department'] ?? '—') ?></td>
                                     <td><?= htmlspecialchars($emp['email'] ?? '') ?></td>
                                     <td><?= htmlspecialchars($emp['phone'] ?? '') ?></td>
                                     <td><?= !empty($emp['hired_at']) ? date('M d, Y', strtotime($emp['hired_at'])) : '—' ?></td>

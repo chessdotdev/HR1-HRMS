@@ -39,9 +39,11 @@ class Employee {
                 a.birthdate,
                 a.age,
                 a.gender,
-                a.skills
+                a.skills,
+                j.department
                   FROM " . $this->table_name . " e
                   LEFT JOIN applicantss a ON e.applicant_id = a.apply_id
+                  LEFT JOIN job_openings j ON j.id = a.job_id
                   WHERE e.employee_id = :employee_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':employee_id', $employee_id);
@@ -83,6 +85,11 @@ class Employee {
                   postal_code = :postal_code,
                   bank_name = :bank_name,
                   bank_account_number = :bank_account_number,
+                  tin_photo_path = COALESCE(:tin_photo_path, tin_photo_path),
+                  sss_photo_path = COALESCE(:sss_photo_path, sss_photo_path),
+                  pagibig_photo_path = COALESCE(:pagibig_photo_path, pagibig_photo_path),
+                  philhealth_photo_path = COALESCE(:philhealth_photo_path, philhealth_photo_path),
+                  bank_photo_path = COALESCE(:bank_photo_path, bank_photo_path),
                   personal_info_completed = 0,
                   personal_info_status = 'Pending Review',
                   onboarding_status = 'In Progress'
@@ -102,6 +109,11 @@ class Employee {
         $stmt->bindParam(':postal_code', $data['postal_code']);
         $stmt->bindParam(':bank_name', $data['bank_name']);
         $stmt->bindParam(':bank_account_number', $data['bank_account_number']);
+        $stmt->bindParam(':tin_photo_path', $data['tin_photo_path']);
+        $stmt->bindParam(':sss_photo_path', $data['sss_photo_path']);
+        $stmt->bindParam(':pagibig_photo_path', $data['pagibig_photo_path']);
+        $stmt->bindParam(':philhealth_photo_path', $data['philhealth_photo_path']);
+        $stmt->bindParam(':bank_photo_path', $data['bank_photo_path']);
         $stmt->bindParam(':employee_id', $employee_id);
         
         $result = $stmt->execute();
