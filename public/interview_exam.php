@@ -114,50 +114,126 @@ if ($session['status'] === 'Not Started') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Interview Exam</title>
+    <title>Interview Exam &mdash; <?= htmlspecialchars($interview['job_title']) ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: 'Geist', sans-serif; background: #f4f4f5; color: #09090b; padding-bottom: 80px; }
-        .exam-wrap { max-width: 720px; margin: 0 auto; padding: 32px 16px; }
-        .exam-header { background: #09090b; color: #fff; border-radius: 12px; padding: 28px 32px; margin-bottom: 28px; }
-        .q-card { background: #fff; border: 1px solid #e4e4e7; border-radius: 10px; padding: 24px; margin-bottom: 14px; }
-        .q-num { font-size: 0.72rem; font-weight: 600; color: #71717a; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
-        .q-text { font-size: 0.95rem; font-weight: 500; margin-bottom: 18px; line-height: 1.5; }
-        .opt-wrap { margin-bottom: 8px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Geist', sans-serif; background: #f0f0f2; color: #09090b; padding-bottom: 100px; }
+
+        /* Nav */
+        .exam-nav { background: #fff; border-bottom: 1px solid #e4e4e7; padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+        .exam-nav-brand { font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
+        .exam-nav-brand .dot { width: 9px; height: 9px; border-radius: 50%; background: #22c55e; display: inline-block; box-shadow: 0 0 0 3px rgba(34,197,94,0.2); }
+        .exam-badge { background: #f4f4f5; border: 1px solid #e4e4e7; border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; color: #71717a; }
+
+        /* Progress */
+        .exam-progress-bar { background: #e4e4e7; height: 5px; }
+        .exam-progress-fill { height: 5px; background: linear-gradient(90deg, #22c55e, #16a34a); transition: width 0.4s ease; width: 0%; }
+
+        /* Hero */
+        .exam-hero { background: linear-gradient(135deg, #09090b 0%, #27272a 100%); color: #fff; padding: 48px 24px 44px; text-align: center; }
+        .exam-hero-label { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-bottom: 14px; }
+        .exam-hero h1 { font-size: 2rem; font-weight: 600; margin-bottom: 6px; }
+        .exam-hero-sub { font-size: 0.9rem; opacity: 0.55; margin-bottom: 28px; }
+        .exam-stats { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+        .exam-stat { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 14px 24px; min-width: 100px; }
+        .exam-stat-val { font-size: 1.5rem; font-weight: 700; line-height: 1; }
+        .exam-stat-label { font-size: 0.68rem; opacity: 0.45; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+        /* Content */
+        .exam-wrap { max-width: 760px; margin: 0 auto; padding: 32px 20px; }
+
+        /* Question cards */
+        .q-card { background: #fff; border: 1px solid #e4e4e7; border-radius: 14px; padding: 28px 32px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); transition: box-shadow 0.2s, border-color 0.2s; }
+        .q-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .q-card.answered { border-left: 4px solid #22c55e; }
+        .q-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .q-num-badge { background: #09090b; color: #fff; border-radius: 8px; padding: 4px 12px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; }
+        .q-pts { font-size: 0.72rem; color: #71717a; background: #fef9c3; border: 1px solid #fde047; border-radius: 20px; padding: 3px 12px; font-weight: 500; }
+        .q-essay-badge { font-size: 0.72rem; color: #6366f1; background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 20px; padding: 3px 12px; font-weight: 500; }
+        .q-text { font-size: 1rem; font-weight: 500; line-height: 1.65; margin-bottom: 20px; color: #09090b; }
+
+        /* Options */
+        .opts-grid { display: flex; flex-direction: column; gap: 10px; }
         .opt-wrap input[type=radio] { display: none; }
-        .opt-label { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid #e4e4e7; border-radius: 8px; cursor: pointer; transition: border-color 0.15s, background 0.15s; user-select: none; }
-        .opt-label:hover { border-color: #a1a1aa; background: #fafafa; }
-        .opt-wrap input[type=radio]:checked ~ .opt-label { border-color: #09090b; background: #f4f4f5; font-weight: 500; }
-        .opt-key { width: 28px; height: 28px; border-radius: 50%; background: #f4f4f5; border: 1px solid #e4e4e7; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; flex-shrink: 0; }
-        .submit-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #e4e4e7; padding: 14px 24px; display: flex; justify-content: center; z-index: 100; }
+        .opt-label { display: flex; align-items: center; gap: 14px; padding: 13px 18px; border: 1.5px solid #e4e4e7; border-radius: 12px; cursor: pointer; transition: all 0.15s; user-select: none; font-size: 0.92rem; background: #fafafa; }
+        .opt-label:hover { border-color: #a1a1aa; background: #f4f4f5; transform: translateX(2px); }
+        .opt-wrap input[type=radio]:checked ~ .opt-label { border-color: #09090b; background: #f4f4f5; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .opt-key { width: 32px; height: 32px; border-radius: 8px; background: #fff; border: 1.5px solid #e4e4e7; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; flex-shrink: 0; transition: all 0.15s; }
+        .opt-wrap input[type=radio]:checked ~ .opt-label .opt-key { background: #09090b; color: #fff; border-color: #09090b; }
+
+        /* Essay textarea */
+        .essay-area { width: 100%; border: 1.5px solid #e4e4e7; border-radius: 12px; padding: 14px 16px; font-size: 0.92rem; font-family: 'Geist', sans-serif; resize: vertical; min-height: 120px; outline: none; transition: border-color 0.15s; background: #fafafa; }
+        .essay-area:focus { border-color: #09090b; background: #fff; }
+
+        /* Submit bar */
+        .submit-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-top: 1px solid #e4e4e7; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; z-index: 100; box-shadow: 0 -4px 16px rgba(0,0,0,0.06); }
+        .submit-bar-info { font-size: 0.85rem; color: #71717a; }
+        .submit-bar-info strong { color: #09090b; }
+        .submit-btn { background: #09090b; color: #fff; border: none; border-radius: 10px; padding: 12px 28px; font-size: 0.9rem; font-weight: 600; font-family: 'Geist', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.15s, transform 0.1s; }
+        .submit-btn:hover { background: #27272a; transform: translateY(-1px); }
+        .submit-btn:active { transform: translateY(0); }
     </style>
 </head>
 <body>
-<div class="exam-wrap">
 
-    <div class="exam-header">
-        <div style="font-size:0.75rem;opacity:0.5;margin-bottom:6px;letter-spacing:0.08em;text-transform:uppercase;">Interview Exam</div>
-        <h4 class="mb-1 fw-semibold"><?= htmlspecialchars($interview['firstname'] . ' ' . $interview['lastname']) ?></h4>
-        <div style="font-size:0.88rem;opacity:0.7;"><?= htmlspecialchars($interview['job_title']) ?></div>
-        <div class="mt-3 d-flex gap-3" style="font-size:0.8rem;opacity:0.6;">
-            <span><i class="bi bi-question-circle me-1"></i><?= count($questions) ?> Question<?= count($questions) !== 1 ? 's' : '' ?></span>
-            <span><i class="bi bi-clock me-1"></i><?= date('F d, Y') ?></span>
+<!-- Top Nav -->
+<div class="exam-nav">
+    <div class="exam-nav-brand">
+        <span class="dot"></span>
+        Interview Exam
+    </div>
+    <div class="exam-badge"><i class="bi bi-calendar3 me-1"></i><?= date('F d, Y') ?></div>
+</div>
+
+<!-- Progress bar -->
+<div class="exam-progress-bar">
+    <div class="exam-progress-fill" id="progressFill" style="width:0%"></div>
+</div>
+
+<!-- Hero -->
+<div class="exam-hero">
+    <div class="exam-hero-label">Applicant Examination</div>
+    <h1><?= htmlspecialchars($interview['firstname'] . ' ' . $interview['lastname']) ?></h1>
+    <div class="exam-hero-sub"><?= htmlspecialchars($interview['job_title']) ?></div>
+    <div class="exam-stats">
+        <div class="exam-stat">
+            <div class="exam-stat-val"><?= count($questions) ?></div>
+            <div class="exam-stat-label">Questions</div>
+        </div>
+        <div class="exam-stat">
+            <div class="exam-stat-val" id="answeredCount">0</div>
+            <div class="exam-stat-label">Answered</div>
+        </div>
+        <div class="exam-stat">
+            <div class="exam-stat-val"><?= array_sum(array_column($questions, 'points')) ?></div>
+            <div class="exam-stat-label">Total Points</div>
         </div>
     </div>
+</div>
 
+<div class="exam-wrap">
     <form method="POST" id="examForm">
         <?php foreach ($questions as $i => $q): ?>
-        <div class="q-card">
-            <div class="q-num">Question <?= $i + 1 ?> &bull; <?= $q['points'] ?> pt<?= $q['points'] > 1 ? 's' : '' ?></div>
+        <div class="q-card" id="qcard_<?= $q['question_id'] ?>">
+            <div class="q-header">
+                <span class="q-num-badge">Q<?= $i + 1 ?></span>
+                <?php if ($q['question_type'] === 'multiple_choice'): ?>
+                <span class="q-pts"><i class="bi bi-star-fill me-1" style="color:#ca8a04;font-size:0.65rem;"></i><?= $q['points'] ?> pt<?= $q['points'] > 1 ? 's' : '' ?></span>
+                <?php else: ?>
+                <span class="q-essay-badge"><i class="bi bi-pencil me-1"></i>Essay</span>
+                <?php endif; ?>
+            </div>
             <div class="q-text"><?= htmlspecialchars($q['question_text']) ?></div>
 
             <?php if ($q['question_type'] === 'multiple_choice'): ?>
+                <div class="opts-grid">
                 <?php foreach (['a','b','c','d'] as $opt): ?>
                     <?php if ($q["option_{$opt}"]): ?>
                     <div class="opt-wrap">
-                        <input type="radio" name="q_<?= $q['question_id'] ?>" id="q<?= $q['question_id'] ?>_<?= $opt ?>" value="<?= $opt ?>">
+                        <input type="radio" name="q_<?= $q['question_id'] ?>" id="q<?= $q['question_id'] ?>_<?= $opt ?>" value="<?= $opt ?>" onchange="onAnswer(<?= $q['question_id'] ?>)">
                         <label for="q<?= $q['question_id'] ?>_<?= $opt ?>" class="opt-label">
                             <span class="opt-key"><?= strtoupper($opt) ?></span>
                             <span><?= htmlspecialchars($q["option_{$opt}"]) ?></span>
@@ -165,28 +241,47 @@ if ($session['status'] === 'Not Started') {
                     </div>
                     <?php endif; ?>
                 <?php endforeach; ?>
+                </div>
             <?php else: ?>
-                <textarea name="q_<?= $q['question_id'] ?>" class="form-control" rows="4"
-                    placeholder="Write your answer here..." style="font-size:0.9rem;"></textarea>
+                <textarea name="q_<?= $q['question_id'] ?>" class="essay-area"
+                    placeholder="Write your answer here..."
+                    oninput="onAnswer(<?= $q['question_id'] ?>)"></textarea>
             <?php endif; ?>
         </div>
         <?php endforeach; ?>
-
         <input type="hidden" name="submit_exam" value="1">
     </form>
 </div>
 
 <div class="submit-bar">
-    <button type="button" class="btn btn-dark px-5" onclick="submitExam()">
-        <i class="bi bi-send me-2"></i>Submit Exam
+    <div class="submit-bar-info">
+        <strong id="answeredCountBar">0</strong> of <?= count($questions) ?> answered
+    </div>
+    <button type="button" class="submit-btn" onclick="submitExam()">
+        <i class="bi bi-send-fill"></i> Submit Exam
     </button>
 </div>
 
 <script>
+const totalQ = <?= count($questions) ?>;
+const answered = new Set();
+
+function onAnswer(qid) {
+    answered.add(qid);
+    document.getElementById('qcard_' + qid)?.classList.add('answered');
+    const count = answered.size;
+    document.getElementById('answeredCount').textContent = count;
+    document.getElementById('answeredCountBar').textContent = count;
+    document.getElementById('progressFill').style.width = (count / totalQ * 100) + '%';
+}
+
 function submitExam() {
-    if (confirm('Are you sure you want to submit? You cannot change your answers after submitting.')) {
-        document.getElementById('examForm').submit();
+    if (answered.size < totalQ) {
+        if (!confirm(`You have answered ${answered.size} of ${totalQ} questions. Submit anyway?`)) return;
+    } else {
+        if (!confirm('Submit your exam? You cannot change your answers after submitting.')) return;
     }
+    document.getElementById('examForm').submit();
 }
 </script>
 </body>
