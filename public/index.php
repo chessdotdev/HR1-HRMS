@@ -205,8 +205,153 @@ body {
 .empty-desc { font-size: 0.82rem; color: #ccc; }
 
 #jobs { scroll-margin-top: 80px; }
-</style>
 
+#chatbot-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #1a1a1a;
+    color: #fff;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    z-index: 9999;
+}
+
+#chatbot-box {
+    position: fixed;
+    bottom: 85px;
+    right: 20px;
+    width: 320px;
+    background: #fff;
+    border: 1px solid #e8e8e4;
+    border-radius: 6px;
+    display: none;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    overflow: hidden;
+    z-index: 9999;
+    transform: translateY(40px); /* start lower */
+    transition: all 0.3s ease;
+}
+
+#chatbot-header {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 12px;
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#chatbot-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#chatbot-messages {
+    padding: 12px;
+    height: 280px;
+    overflow-y: auto;
+    font-size: 0.8rem;
+    overflow-y: auto; 
+    scrollbar-width: thin;
+    scrollbar-color: black transparent;
+}
+#chatbot-messages::-webkit-scrollbar {
+    width: 6px;
+}
+#chatbot-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+#chatbot-messages::-webkit-scrollbar-thumb {
+    background-color: #555;      
+    border-radius: 10px;        
+    border: 1px solid transparent;  
+}
+
+#chatbot-messages::-webkit-scrollbar-thumb:hover {
+    background-color: #333;      
+}
+
+.chat-msg {
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    max-width: 80%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.user-msg {
+    background: #1a1a1a;
+    color: #fff;
+    margin-left: auto;
+}
+.typing-msg {
+    background: transparent;   
+    color: #aaa;              
+    font-style: italic;
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    opacity: 0.8;
+}
+.bot-msg {
+    background: #f0f0ec;
+    color: #333;
+}
+.bot-msg a {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+}
+#chatbot-input-area {
+    display: flex;
+    border-top: 1px solid #eee;
+}
+
+#chatbot-input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    font-size: 0.8rem;
+}
+
+#chatbot-input:focus {
+    outline: none;
+}
+
+#chatbot-send {
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    padding: 0 14px;
+    cursor: pointer;
+}
+</style>
+<div id="chatbot-toggle">💬</div>
+<div id="chatbot-box">
+    <div id="chatbot-header">
+        <span>TechnoVista Chatbot Assistant</span>
+        <button id="chatbot-close">&times;</button>
+    </div>
+
+    <div id="chatbot-messages"></div>
+
+    <div id="chatbot-input-area">
+        <input type="text" id="chatbot-input" placeholder="Type a message...">
+        <button id="chatbot-send">➤</button>
+    </div>
+</div>
 <!-- Hero -->
 <div class="hero-banner">
     <div class="container">
@@ -290,5 +435,105 @@ body {
         <?php endif; ?>
     </div>
 </div>
+<script>
+const toggleBtn = document.getElementById('chatbot-toggle');
+const chatBox = document.getElementById('chatbot-box');
+const closeBtn = document.getElementById('chatbot-close');
+const input = document.getElementById('chatbot-input');
+const sendBtn = document.getElementById('chatbot-send');
+const messages = document.getElementById('chatbot-messages');
 
+let isOpen = false;
+chatBox.style.display = 'flex';
+chatBox.style.opacity = '0';
+chatBox.style.transform = 'translateY(20px) scale(0.95)';
+chatBox.style.pointerEvents = 'none';
+
+function toggleChat(){
+    if(isOpen){
+        chatBox.style.opacity = '0';
+        chatBox.style.transform = 'translateY(40px) scale(0.95)';
+        chatBox.style.pointerEvents = 'none';
+
+        setTimeout(()=>{
+            chatBox.style.display = "none"
+        },300)
+
+        isOpen = false;
+    }else{
+       
+        chatBox.style.display = "flex"
+
+        setTimeout(()=>{
+            chatBox.style.display = 'flex';
+            chatBox.style.opacity = '1';
+            chatBox.style.transform = 'translateY(0) scale(1)';
+            chatBox.style.pointerEvents = 'auto';
+        },300)
+
+        isOpen = true;
+    }
+}
+
+function linkify(text) {
+    return text.replace(/(https?:\/\/[^\s<]+?)([.,!?;:)\]'"]*(?:\s|$))/g, '<a href="$1" target="_blank">$1</a>$2');
+}
+
+async function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    const userMsg = document.createElement('div');
+    userMsg.className = 'chat-msg user-msg';
+    userMsg.textContent = text;
+    const typingMsg = document.createElement('div');
+    typingMsg.className = 'chat-msg bot-msg';
+    typingMsg.textContent = 'Typing...';
+    messages.appendChild(typingMsg);
+    messages.appendChild(userMsg);
+    messages.scrollTop = messages.scrollHeight;
+
+    input.value = '';
+
+    try {
+        const res = await fetch('http://localhost:3000/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+        });
+
+        const data = await res.json();
+
+        const botMsg = document.createElement('div');
+        botMsg.className = 'chat-msg bot-msg';
+        botMsg.textContent = data.response;
+        linkify(botMsg.innerHTML = linkify(botMsg.textContent));
+        if(res.status === 429){
+            botMsg.textContent = data.error;
+        }
+        
+        typingMsg.remove();
+        messages.appendChild(botMsg);
+        messages.scrollTop = messages.scrollHeight;
+
+    } catch (err) {
+        console.error(err);
+        typingMsg.remove();
+        const botMsg = document.createElement('div');
+        botMsg.className = 'chat-msg bot-msg';
+        botMsg.textContent = 'Failed to reach the server.';
+        messages.appendChild(botMsg);
+        messages.scrollTop = messages.scrollHeight;
+    }
+}
+
+sendBtn.addEventListener('click', sendMessage);
+
+input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});
+
+toggleBtn.addEventListener('click', toggleChat);
+closeBtn.addEventListener('click', toggleChat);
+</script>
 <?php include '../includes/footer.php'; ?>

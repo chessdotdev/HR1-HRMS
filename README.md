@@ -18,7 +18,7 @@
 
 ## Overview
 
-HR1 is a full-featured HR system designed for Luxor Grand Hotel. It covers the complete employee lifecycle — from job posting and applicant tracking, to onboarding, performance evaluation, and social recognition.
+HR1 is a full-featured HR system designed for TechnoVista Hotel. It covers the complete employee lifecycle — from job posting and applicant tracking, to onboarding, performance evaluation, and social recognition.
 
 It has two portals:
 - **Admin Portal** — for HR staff to manage recruitment, employees, performance, and recognition
@@ -258,4 +258,4 @@ The system uses **HTTP** for all client-server communication including page load
 
 ---
 
-> Built for Luxor Grand Hotel — Hotel & Restaurant HR System (HR1)
+> Built for TechnoVista Hotel — Hotel & Restaurant HR System (HR1)

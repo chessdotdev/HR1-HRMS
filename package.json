@@ -1,0 +1,29 @@
+{
+  "name": "hotel_and_restaurant_hr1",
+  "version": "1.0.0",
+  "description": "> A web-based Human Resource Management System for hotel and restaurant operations — built with PHP, MySQL, and Bootstrap 5.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node chatbot/chat.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chessdotdev/HR1-HRMS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/chessdotdev/HR1-HRMS/issues"
+  },
+  "homepage": "https://github.com/chessdotdev/HR1-HRMS#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.3.1",
+    "openai": "^6.33.0"
+  }
+}
