@@ -489,8 +489,8 @@ async function sendMessage() {
     const typingMsg = document.createElement('div');
     typingMsg.className = 'chat-msg bot-msg';
     typingMsg.textContent = 'Typing...';
-    messages.appendChild(typingMsg);
     messages.appendChild(userMsg);
+    messages.appendChild(typingMsg);
     messages.scrollTop = messages.scrollHeight;
 
     input.value = '';
